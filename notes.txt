@@ -1,0 +1,22 @@
+Download top memes from img flip API and save to files
+curl https://api.imgflip.com/get_memes | jq > img_flip_get_memes_api.json
+
+Scrape this page?
+https://imgflip.com/memetemplates?sort=top-all-time
+
+Could maybe even scrap this page on the fly, it has a search bar.  Just might be slow that way.
+
+Maybe make this an iMessage extension for Google Image Search instead?
+That would be more generally useful but maybe not allowed.
+
+Atlas MongoDb setup
+database name: memedb
+user: lambdatallc
+password: 5TRz5oM8x0mS1d7J
+
+Next:
+- Work on mobile app
+    - maybe that could just search imgflip on the fly, no need for a database or api ?
+    - server could possibly also just search on the fly
+- Create HTTP API server for finding memes (stored in MongoDB)
+    - can I reuse my existing DigitalOcean droplet?  Probably need a new one
