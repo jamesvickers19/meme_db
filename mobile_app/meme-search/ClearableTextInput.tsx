@@ -42,7 +42,7 @@ const ClearableTextInput: React.FC<ClearableTextInputProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 50,
+    marginTop: 55,
     marginHorizontal: 15,
     position: "relative",
     justifyContent: "center",

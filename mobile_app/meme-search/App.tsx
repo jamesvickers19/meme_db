@@ -134,7 +134,11 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      <ClearableTextInput text={searchQuery} setText={setSearchQuery} />
+      <ClearableTextInput
+        text={searchQuery}
+        setText={setSearchQuery}
+        placeholder="Search for memes..."
+      />
       <MemeGrid memes={searchResults || []}></MemeGrid>
       <Toast />
     </View>
