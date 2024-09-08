@@ -13,6 +13,7 @@ import cheerio from "react-native-cheerio";
 import ClearableTextInput from "./ClearableTextInput";
 import * as Clipboard from "expo-clipboard";
 import * as FileSystem from "expo-file-system";
+import Toast from "react-native-toast-message";
 
 const { width } = Dimensions.get("window");
 const memeGridNumColumns = 3;
@@ -49,6 +50,17 @@ async function useMemeSearch(query: string): Promise<Meme[]> {
   }
 }
 
+const showMsg = (type: "success" | "error", msg: string) => {
+  Toast.show({
+    type,
+    text1: msg,
+    topOffset: 80,
+    text1Style: {
+      fontSize: 16,
+    },
+  });
+};
+
 const MemeGrid = ({ memes }: { memes: Meme[] }) => {
   const handlePress = async (meme: Meme) => {
     // TODO use full size image?
@@ -57,6 +69,9 @@ const MemeGrid = ({ memes }: { memes: Meme[] }) => {
     // https://imgflip.com/meme/Hide-the-Pain-Harold
     // Full image might be at:
     //https://imgflip.com/s{href}.jpg
+
+    const showError = () =>
+      showMsg("error", `Could not copy meme to clipboard!`);
 
     try {
       const localUri =
@@ -71,12 +86,12 @@ const MemeGrid = ({ memes }: { memes: Meme[] }) => {
         });
         await Clipboard.setImageAsync(base64);
         await FileSystem.deleteAsync(localUri);
-        alert(`'${meme.memeName}' copied to clipboard!`);
+        showMsg("success", `Meme copied to clipboard!`);
       } else {
-        alert(`Could not copy meme to clipboard!`);
+        showError();
       }
     } catch (error: any) {
-      alert(`Could not copy meme to clipboard!`);
+      showError();
       console.log("Error: ", error.message);
     }
   };
@@ -121,6 +136,7 @@ export default function App() {
     <View style={styles.container}>
       <ClearableTextInput text={searchQuery} setText={setSearchQuery} />
       <MemeGrid memes={searchResults || []}></MemeGrid>
+      <Toast />
     </View>
   );
 }
