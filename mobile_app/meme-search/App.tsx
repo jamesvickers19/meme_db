@@ -9,14 +9,15 @@ import {
   View,
 } from "react-native";
 import axios from "axios";
-
 import cheerio from "react-native-cheerio";
 import ClearableTextInput from "./ClearableTextInput";
+import * as Clipboard from "expo-clipboard";
+import * as FileSystem from "expo-file-system";
 
 const { width } = Dimensions.get("window");
-const numColumns = 3; // Number of columns in the grid
+const memeGridNumColumns = 3;
 // Calculate item width to make images approximately 1 inch wide
-const imageWidth = width / numColumns - 20; // Adjust based on margins
+const imageWidth = width / memeGridNumColumns - 20; // Adjust based on margins
 
 interface Meme {
   memeName: string;
@@ -49,9 +50,35 @@ async function useMemeSearch(query: string): Promise<Meme[]> {
 }
 
 const MemeGrid = ({ memes }: { memes: Meme[] }) => {
-  const handlePress = (meme: Meme) => {
-    console.log("Clicked meme:", meme);
-    // TODO copy to clipboard and show notification
+  const handlePress = async (meme: Meme) => {
+    // TODO use full size image?
+    // <a> with title has href like: /meme/Hide-the-Pain-Harold
+    // Combine with https://imgflip.com to make:
+    // https://imgflip.com/meme/Hide-the-Pain-Harold
+    // Full image might be at:
+    //https://imgflip.com/s{href}.jpg
+
+    try {
+      const localUri =
+        FileSystem.documentDirectory + `meme_search${Date.now()}.jpg`;
+      await FileSystem.downloadAsync(meme.imgUri, localUri);
+
+      // Read the file and convert it to Base64
+      const fileInfo = await FileSystem.getInfoAsync(localUri);
+      if (fileInfo.exists) {
+        const base64 = await FileSystem.readAsStringAsync(localUri, {
+          encoding: FileSystem.EncodingType.Base64,
+        });
+        await Clipboard.setImageAsync(base64);
+        await FileSystem.deleteAsync(localUri);
+        alert(`'${meme.memeName}' copied to clipboard!`);
+      } else {
+        alert(`Could not copy meme to clipboard!`);
+      }
+    } catch (error: any) {
+      alert(`Could not copy meme to clipboard!`);
+      console.log("Error: ", error.message);
+    }
   };
 
   const renderMeme = ({ item }: { item: Meme }) => {
@@ -71,7 +98,7 @@ const MemeGrid = ({ memes }: { memes: Meme[] }) => {
       data={memes}
       renderItem={renderMeme}
       //keyExtractor={(item) => item.imgUri} // TODO maybe not a good key
-      numColumns={numColumns}
+      numColumns={memeGridNumColumns}
       contentContainerStyle={styles.grid}
     />
   );
