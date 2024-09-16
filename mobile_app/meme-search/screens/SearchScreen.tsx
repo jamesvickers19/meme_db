@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { StyleSheet, View } from "react-native";
+import { View } from "react-native";
 import axios from "axios";
 import cheerio from "react-native-cheerio";
 import ClearableTextInput from "../ClearableTextInput";
@@ -46,7 +46,12 @@ export default function SearchScreen() {
   }, [searchQuery]);
 
   return (
-    <View style={styles.container}>
+    <View
+      style={{
+        backgroundColor: "#fff",
+        justifyContent: "center",
+      }}
+    >
       <ClearableTextInput
         text={searchQuery}
         setText={setSearchQuery}
@@ -62,22 +67,3 @@ export default function SearchScreen() {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: "#fff",
-    justifyContent: "center",
-  },
-  searchBar: {
-    alignSelf: "flex-start",
-    height: 40,
-    width: "95%",
-    borderColor: "#CED0CE",
-    borderWidth: 1,
-    borderRadius: 5,
-    paddingHorizontal: 10,
-    marginTop: 60,
-    marginBottom: 10,
-    marginHorizontal: 10,
-  },
-});
