@@ -1,13 +1,31 @@
-import { StyleSheet, View } from "react-native";
+import { View } from "react-native";
 import { useEffect, useState } from "react";
 import { useIsFocused } from "@react-navigation/native";
 import { CachedMeme, Meme } from "../types";
 import { MemeGrid } from "../components/MemeGrid";
 import Toast from "react-native-toast-message";
 import * as MemeCache from "../MemeCache";
+import ClearableTextInput from "../ClearableTextInput";
 
 export default function FavoritesScreen() {
   const [recentlyUsedMemes, setRecentlyUsedMemes] = useState<CachedMeme[]>([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filteredRecentlyUsedMemes, setFilteredRecentlyUsedMemes] = useState<
+    CachedMeme[]
+  >([]);
+
+  useEffect(() => {
+    const doSearch = async () => {
+      setFilteredRecentlyUsedMemes(
+        searchQuery
+          ? recentlyUsedMemes.filter((m) =>
+              m.memeName.toLowerCase().includes(searchQuery.toLowerCase())
+            )
+          : recentlyUsedMemes
+      );
+    };
+    doSearch();
+  }, [recentlyUsedMemes, searchQuery]);
 
   const loadRecentlyUsedMemes = async () => {
     setRecentlyUsedMemes(await MemeCache.getCachedMemes());
@@ -21,9 +39,19 @@ export default function FavoritesScreen() {
   }, [isFocused]);
 
   return (
-    <View style={styles.container}>
+    <View
+      style={{
+        backgroundColor: "#fff",
+        justifyContent: "center",
+      }}
+    >
+      <ClearableTextInput
+        text={searchQuery}
+        setText={setSearchQuery}
+        placeholder="Search in recently used memes..."
+      />
       <MemeGrid
-        memes={recentlyUsedMemes || []}
+        memes={filteredRecentlyUsedMemes}
         onMemePressed={async (meme: Meme) => {
           await MemeCache.addMemeToCache(meme); // this updates the last used time in the file
         }}
@@ -32,11 +60,3 @@ export default function FavoritesScreen() {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: "#fff",
-    justifyContent: "center",
-    paddingTop: 50,
-  },
-});
