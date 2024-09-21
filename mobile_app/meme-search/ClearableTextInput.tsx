@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
     height: "100%",
   },
   clearButtonText: {
-    fontSize: 18,
+    fontSize: 28,
     color: "#888",
   },
 });
