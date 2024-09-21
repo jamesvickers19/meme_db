@@ -14,6 +14,13 @@ async function useMemeSearch(query: string): Promise<Meme[]> {
       `https://imgflip.com/memesearch?q=${encodeURIComponent(query)}`
     );
 
+    // TODO use full size image?
+    // <a> with title has href like: /meme/Hide-the-Pain-Harold
+    // Combine with https://imgflip.com to make:
+    // https://imgflip.com/meme/Hide-the-Pain-Harold
+    // Full image might be at:
+    //https://imgflip.com/s{href}.jpg
+
     const $ = cheerio.load(html);
     const memeDivs = $("div.mt-img-wrap")
       .map((_index: any, element: any) => {

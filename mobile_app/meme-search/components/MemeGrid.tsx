@@ -30,13 +30,6 @@ export function MemeGrid({
   onMemePressed,
 }: MemeGridProps) {
   const handlePress = async (meme: Meme) => {
-    // TODO use full size image?
-    // <a> with title has href like: /meme/Hide-the-Pain-Harold
-    // Combine with https://imgflip.com to make:
-    // https://imgflip.com/meme/Hide-the-Pain-Harold
-    // Full image might be at:
-    //https://imgflip.com/s{href}.jpg
-
     const showError = () =>
       showMsg("error", `Could not copy meme to clipboard!`);
 
