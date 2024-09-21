@@ -52,7 +52,11 @@ export default function FavoritesScreen() {
       />
       <MemeGrid
         memes={filteredRecentlyUsedMemes}
-        noResultsText="No recently used memes here...yet :) Go to the search tab and use some to see them here!"
+        noResultsText={
+          recentlyUsedMemes.length === 0
+            ? "No recently used memes here...yet :) Go to the search tab and use some to see them here!"
+            : ""
+        }
         onMemePressed={async (meme: Meme) => {
           await MemeCache.addMemeToCache(meme); // this updates the last used time in the file
         }}
