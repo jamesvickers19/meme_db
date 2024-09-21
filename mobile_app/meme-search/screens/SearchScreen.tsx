@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import axios from "axios";
 import cheerio from "react-native-cheerio";
 import ClearableTextInput from "../ClearableTextInput";
@@ -45,38 +45,64 @@ export default function SearchScreen() {
       setSearchResults(results);
       setIsSearching(false);
     };
-    doSearch();
+    // single letter doesn't make a lot of sense, and on some API's returns nothing.
+    if (searchQuery.length > 1) {
+      doSearch();
+    }
   }, [searchQuery]);
 
   return (
-    <View
-      style={{
-        backgroundColor: "#fff",
-        justifyContent: "center",
-      }}
-    >
+    <View style={styles.container}>
       <ClearableTextInput
         text={searchQuery}
         setText={setSearchQuery}
-        placeholder="Search for memes..."
+        placeholder="Search for memes"
       />
-      <MemeGrid
-        memes={searchResults || []}
-        noResultsText={
-          // tends to not find results for single-character search, so don't
-          // show 'no results' text for just beginning to type (check searchQuery.length > 1 instead of 0)
-          searchQuery.length > 1 &&
-          searchResults &&
-          !(searchResults.length > 0) &&
-          !isSearching
-            ? "No results found"
-            : ""
-        }
-        onMemePressed={async (meme: Meme) =>
-          await MemeCache.addMemeToCache(meme)
-        }
-      ></MemeGrid>
+      {searchQuery.length === 0 ? (
+        <View style={styles.noSearchQueryContainer}>
+          <Text style={{ fontSize: 80 }}>☝️</Text>
+          <Text style={styles.noSearchQueryText}>
+            Use the search bar to find memes, then long press on them to copy to
+            clipboard!
+          </Text>
+        </View>
+      ) : (
+        <MemeGrid
+          memes={searchResults || []}
+          noResultsText={
+            // tends to not find results for single-character search, so don't
+            // show 'no results' text for just beginning to type (check searchQuery.length > 1 instead of 0)
+            searchQuery.length > 1 &&
+            searchResults &&
+            !(searchResults.length > 0) &&
+            !isSearching
+              ? "No results found"
+              : ""
+          }
+          onMemePressed={async (meme: Meme) =>
+            await MemeCache.addMemeToCache(meme)
+          }
+        ></MemeGrid>
+      )}
       <Toast />
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: "#fff",
+    justifyContent: "center",
+    flex: 1,
+  },
+  noSearchQueryContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  noSearchQueryText: {
+    fontSize: 28,
+    fontWeight: "bold",
+    margin: 10,
+  },
+});

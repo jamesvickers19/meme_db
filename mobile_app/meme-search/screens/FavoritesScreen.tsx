@@ -48,7 +48,7 @@ export default function FavoritesScreen() {
       <ClearableTextInput
         text={searchQuery}
         setText={setSearchQuery}
-        placeholder="Search in recently used memes..."
+        placeholder="Search..."
       />
       <MemeGrid
         memes={filteredRecentlyUsedMemes}

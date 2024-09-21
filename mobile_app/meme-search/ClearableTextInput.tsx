@@ -48,9 +48,10 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   input: {
+    fontSize: 28,
     height: 40,
     borderColor: "#ccc",
-    borderWidth: 1,
+    borderWidth: 3,
     borderRadius: 5,
     paddingHorizontal: 10,
     paddingRight: 30, // Add padding to the right to make space for the clear button
