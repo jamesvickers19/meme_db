@@ -35,12 +35,15 @@ async function useMemeSearch(query: string): Promise<Meme[]> {
 
 export default function SearchScreen() {
   const [searchQuery, setSearchQuery] = useState("");
-  const [searchResults, setSearchResults] = useState<any>(null);
+  const [isSearching, setIsSearching] = useState(false);
+  const [searchResults, setSearchResults] = useState<any[] | null>(null);
 
   useEffect(() => {
     const doSearch = async () => {
+      setIsSearching(true);
       const results = await useMemeSearch(searchQuery);
       setSearchResults(results);
+      setIsSearching(false);
     };
     doSearch();
   }, [searchQuery]);
@@ -59,6 +62,16 @@ export default function SearchScreen() {
       />
       <MemeGrid
         memes={searchResults || []}
+        noResultsText={
+          // tends to not find results for single-character search, so don't
+          // show 'no results' text for just beginning to type (check searchQuery.length > 1 instead of 0)
+          searchQuery.length > 1 &&
+          searchResults &&
+          !(searchResults.length > 0) &&
+          !isSearching
+            ? "No results found"
+            : ""
+        }
         onMemePressed={async (meme: Meme) =>
           await MemeCache.addMemeToCache(meme)
         }

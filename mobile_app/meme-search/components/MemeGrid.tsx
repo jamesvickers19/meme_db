@@ -9,6 +9,7 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
+  View,
 } from "react-native";
 import { hashMeme } from "../MemeUtils";
 
@@ -19,10 +20,15 @@ const imageWidth = width / memeGridNumColumns - 20; // Adjust based on margins
 
 export type MemeGridProps = {
   memes: Meme[];
+  noResultsText?: string;
   onMemePressed?: (meme: Meme) => void;
 };
 
-export function MemeGrid({ memes, onMemePressed }: MemeGridProps) {
+export function MemeGrid({
+  memes,
+  noResultsText,
+  onMemePressed,
+}: MemeGridProps) {
   const handlePress = async (meme: Meme) => {
     // TODO use full size image?
     // <a> with title has href like: /meme/Hide-the-Pain-Harold
@@ -77,11 +83,25 @@ export function MemeGrid({ memes, onMemePressed }: MemeGridProps) {
       keyExtractor={hashMeme}
       numColumns={memeGridNumColumns}
       contentContainerStyle={styles.grid}
+      ListEmptyComponent={
+        <View style={styles.emptyList}>
+          <Text style={styles.emptyText}>{noResultsText}</Text>
+        </View>
+      }
     />
   );
 }
 
 const styles = StyleSheet.create({
+  emptyList: {
+    justifyContent: "center",
+    alignItems: "center",
+    flex: 1,
+  },
+  emptyText: {
+    fontSize: 18,
+    color: "#333",
+  },
   grid: {
     padding: 10,
   },
