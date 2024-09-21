@@ -9,7 +9,6 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  View,
 } from "react-native";
 import { hashMeme } from "../MemeUtils";
 
@@ -20,13 +19,13 @@ const imageWidth = width / memeGridNumColumns - 20; // Adjust based on margins
 
 export type MemeGridProps = {
   memes: Meme[];
-  noResultsText?: string;
+  noResultsComponent?: React.ReactElement;
   onMemePressed?: (meme: Meme) => void;
 };
 
 export function MemeGrid({
   memes,
-  noResultsText,
+  noResultsComponent,
   onMemePressed,
 }: MemeGridProps) {
   const handlePress = async (meme: Meme) => {
@@ -76,25 +75,12 @@ export function MemeGrid({
       keyExtractor={hashMeme}
       numColumns={memeGridNumColumns}
       contentContainerStyle={styles.grid}
-      ListEmptyComponent={
-        <View style={styles.emptyList}>
-          <Text style={styles.emptyText}>{noResultsText}</Text>
-        </View>
-      }
+      ListEmptyComponent={noResultsComponent}
     />
   );
 }
 
 const styles = StyleSheet.create({
-  emptyList: {
-    justifyContent: "center",
-    alignItems: "center",
-    flex: 1,
-  },
-  emptyText: {
-    fontSize: 18,
-    color: "#333",
-  },
   grid: {
     padding: 10,
   },

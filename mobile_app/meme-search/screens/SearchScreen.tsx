@@ -40,21 +40,95 @@ async function useMemeSearch(query: string): Promise<Meme[]> {
   }
 }
 
+const AppHelpDisplay = () => {
+  return (
+    <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+      <Text style={{ fontSize: 80 }}>☝️</Text>
+      <Text style={styles.noSearchQueryText}>
+        Use the search bar to find memes, then long press on them to copy to
+        clipboard!
+      </Text>
+    </View>
+  );
+};
+
+const RecentlyUsedMemesDisplay = ({
+  recentlyUsedMemes,
+}: {
+  recentlyUsedMemes: Meme[];
+}) => {
+  return (
+    <>
+      <View
+        style={{
+          alignItems: "center",
+          justifyContent: "center",
+          marginTop: 10,
+        }}
+      >
+        <Text style={{ fontWeight: "bold", fontSize: 18 }}>Recently Used</Text>
+      </View>
+      <MemeGrid
+        memes={recentlyUsedMemes}
+        onMemePressed={async (meme: Meme) => {
+          await MemeCache.addMemeToCache(meme); // this updates the last used time in the file
+        }}
+      ></MemeGrid>
+    </>
+  );
+};
+
+const NoSearchResultsDisplay = () => {
+  return (
+    <View
+      style={{
+        alignItems: "center",
+        justifyContent: "center",
+        marginTop: 10,
+      }}
+    >
+      <Text style={{ fontWeight: "bold", fontSize: 24 }}>No results found</Text>
+    </View>
+  );
+};
+
 export default function SearchScreen() {
   const [searchQuery, setSearchQuery] = useState("");
   const [isSearching, setIsSearching] = useState(false);
-  const [searchResults, setSearchResults] = useState<any[] | null>(null);
+  const [mainContent, setMainContent] = useState<React.ReactElement>(<View />);
+
+  const doSearch = async () => {
+    setIsSearching(true);
+    const results = await useMemeSearch(searchQuery);
+    setIsSearching(false);
+    setMainContent(
+      <MemeGrid
+        memes={results || []}
+        noResultsComponent={isSearching ? <View /> : <NoSearchResultsDisplay />}
+        onMemePressed={async (meme: Meme) =>
+          await MemeCache.addMemeToCache(meme)
+        }
+      ></MemeGrid>
+    );
+  };
+
+  const showRecentlyUsedMemesOrHelpInfo = async () => {
+    const recentlyUsedMemes = await MemeCache.getCachedMemes();
+    const component =
+      recentlyUsedMemes.length === 0 ? (
+        <AppHelpDisplay />
+      ) : (
+        <RecentlyUsedMemesDisplay recentlyUsedMemes={recentlyUsedMemes} />
+      );
+    setMainContent(component);
+  };
 
   useEffect(() => {
-    const doSearch = async () => {
-      setIsSearching(true);
-      const results = await useMemeSearch(searchQuery);
-      setSearchResults(results);
-      setIsSearching(false);
-    };
     // single letter doesn't make a lot of sense, and on some API's returns nothing.
     if (searchQuery.length > 1) {
       doSearch();
+    } else {
+      showRecentlyUsedMemesOrHelpInfo();
     }
   }, [searchQuery]);
 
@@ -65,32 +139,7 @@ export default function SearchScreen() {
         setText={setSearchQuery}
         placeholder="Search for memes"
       />
-      {searchQuery.length === 0 ? (
-        <View style={styles.noSearchQueryContainer}>
-          <Text style={{ fontSize: 80 }}>☝️</Text>
-          <Text style={styles.noSearchQueryText}>
-            Use the search bar to find memes, then long press on them to copy to
-            clipboard!
-          </Text>
-        </View>
-      ) : (
-        <MemeGrid
-          memes={searchResults || []}
-          noResultsText={
-            // tends to not find results for single-character search, so don't
-            // show 'no results' text for just beginning to type (check searchQuery.length > 1 instead of 0)
-            searchQuery.length > 1 &&
-            searchResults &&
-            !(searchResults.length > 0) &&
-            !isSearching
-              ? "No results found"
-              : ""
-          }
-          onMemePressed={async (meme: Meme) =>
-            await MemeCache.addMemeToCache(meme)
-          }
-        ></MemeGrid>
-      )}
+      {mainContent}
       <Toast />
     </View>
   );
