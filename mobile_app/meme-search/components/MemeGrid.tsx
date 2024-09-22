@@ -29,31 +29,33 @@ export function MemeGrid({
   onMemePressed,
 }: MemeGridProps) {
   const handlePress = async (meme: Meme) => {
-    const showError = () =>
-      showMsg("error", `Could not copy meme to clipboard!`);
-
-    try {
-      const localUri =
-        FileSystem.documentDirectory + `meme_search${Date.now()}.jpg`;
-      await FileSystem.downloadAsync(meme.imgUri, localUri);
-
-      // Read the file and convert it to Base64
-      const fileInfo = await FileSystem.getInfoAsync(localUri);
-      if (fileInfo.exists) {
-        const base64 = await FileSystem.readAsStringAsync(localUri, {
-          encoding: FileSystem.EncodingType.Base64,
-        });
-        await Clipboard.setImageAsync(base64);
-        await FileSystem.deleteAsync(localUri);
-        showMsg("success", `Meme copied to clipboard!`);
-        onMemePressed?.(meme);
-      } else {
-        showError();
-      }
-    } catch (error: any) {
-      showError();
-      console.log("Error: ", error.message);
+    // try to get better image quality if possible by going to full source image
+    // not always findable, so fall back to thumbUri if needed.
+    const possibleUris = [
+      `https://imgflip.com/s${meme.href}.jpg`,
+      meme.thumbUri,
+    ];
+    for (const imgUri of possibleUris) {
+      try {
+        const localUri =
+          FileSystem.documentDirectory + `meme_search${Date.now()}.jpg`;
+        await FileSystem.downloadAsync(imgUri, localUri);
+        // Read the file and convert it to Base64
+        const fileInfo = await FileSystem.getInfoAsync(localUri);
+        if (fileInfo.exists) {
+          const base64 = await FileSystem.readAsStringAsync(localUri, {
+            encoding: FileSystem.EncodingType.Base64,
+          });
+          await Clipboard.setImageAsync(base64);
+          await FileSystem.deleteAsync(localUri);
+          showMsg("success", `Meme copied to clipboard!`);
+          onMemePressed?.(meme);
+          return;
+        }
+      } catch (error: any) {}
     }
+
+    showMsg("error", `Could not copy meme to clipboard!`);
   };
 
   const renderMeme = ({ item }: { item: Meme }) => {
@@ -63,7 +65,7 @@ export function MemeGrid({
         style={styles.memeGridContainer}
       >
         <Text style={styles.memeTitle}>{item.memeName}</Text>
-        <Image source={{ uri: item.imgUri }} style={styles.image} />
+        <Image source={{ uri: item.thumbUri }} style={styles.image} />
       </TouchableOpacity>
     );
   };

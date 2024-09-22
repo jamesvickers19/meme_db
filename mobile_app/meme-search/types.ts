@@ -1,6 +1,7 @@
 export interface Meme {
   memeName: string;
-  imgUri: string;
+  href: string;
+  thumbUri: string;
 }
 
 export interface CachedMeme extends Meme {

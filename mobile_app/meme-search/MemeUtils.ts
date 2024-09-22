@@ -12,5 +12,5 @@ const hashCode = (s: string) => {
 };
 
 export function hashMeme(meme: Meme): string {
-  return hashCode(meme.imgUri).toString();
+  return (hashCode(meme.thumbUri) + hashCode(meme.href)).toString();
 }
