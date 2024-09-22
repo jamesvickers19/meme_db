@@ -88,8 +88,10 @@ const styles = StyleSheet.create({
   },
   memeGridContainer: {
     flex: 1,
-    margin: 5,
+    margin: 3,
     borderRadius: 5,
+    borderWidth: 1,
+    borderColor: "blue",
     backgroundColor: "#fff",
     elevation: 3, // For Android shadow
     shadowColor: "#000", // For iOS shadow

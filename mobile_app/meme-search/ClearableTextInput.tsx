@@ -50,8 +50,9 @@ const styles = StyleSheet.create({
   input: {
     fontSize: 28,
     height: 40,
-    borderColor: "#ccc",
-    borderWidth: 3,
+    color: "black", // text color
+    borderColor: "blue",
+    borderWidth: 2,
     borderRadius: 5,
     paddingHorizontal: 10,
     paddingRight: 30, // Add padding to the right to make space for the clear button
