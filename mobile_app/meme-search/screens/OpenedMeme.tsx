@@ -1,5 +1,12 @@
 import { AntDesign } from "@expo/vector-icons";
-import { Image, StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import {
+  Image,
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  SafeAreaView,
+} from "react-native";
 import Toast from "react-native-toast-message";
 import { copyMemeToClipboard } from "../CopyMeme";
 import { Meme } from "../types";
@@ -16,7 +23,7 @@ export const OpenedMemeDisplay = ({
   const [imageError, setImageError] = useState(false);
   // TODO make more sense as a modal?
   return (
-    <View style={styles.openedMemeContainer}>
+    <SafeAreaView style={styles.openedMemeContainer}>
       <TouchableOpacity style={{ marginLeft: 7 }} onPress={() => onClose()}>
         <AntDesign name="leftcircle" size={32} color="black" />
       </TouchableOpacity>
@@ -40,7 +47,7 @@ export const OpenedMemeDisplay = ({
         </TouchableOpacity>
       </View>
       <Toast />
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -48,7 +55,6 @@ const styles = StyleSheet.create({
   openedMemeContainer: {
     flex: 1,
     backgroundColor: "white",
-    marginTop: 60,
   },
   fullScreenImage: {
     width: "100%",

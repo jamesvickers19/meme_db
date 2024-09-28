@@ -9,6 +9,7 @@ import { MemeGrid } from "../components/MemeGrid";
 import * as MemeCache from "../MemeCache";
 import { copyMemeToClipboard } from "../CopyMeme";
 import { OpenedMemeDisplay } from "./OpenedMeme";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 async function useMemeSearch(query: string): Promise<Meme[]> {
   try {
@@ -149,7 +150,7 @@ export default function SearchScreen() {
   }
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <ClearableTextInput
         text={searchQuery}
         setText={setSearchQuery}
@@ -157,7 +158,7 @@ export default function SearchScreen() {
       />
       {mainContent}
       <Toast />
-    </View>
+    </SafeAreaView>
   );
 }
 
