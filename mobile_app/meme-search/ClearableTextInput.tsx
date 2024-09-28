@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -18,13 +18,19 @@ const ClearableTextInput: React.FC<ClearableTextInputProps> = ({
   setText,
   placeholder,
 }: ClearableTextInputProps) => {
+  const inputRef = useRef<any>(null);
   const clearText = () => {
     setText("");
+    // set focus to TextInput
+    if (inputRef.current) {
+      //inputRef.current.focus(); // Focus the TextInput
+    }
   };
 
   return (
     <View style={styles.container}>
       <TextInput
+        ref={inputRef}
         style={styles.input}
         value={text}
         onChangeText={setText}
