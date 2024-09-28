@@ -22,8 +22,10 @@ async function getCachedMemeFilenames() {
   return await FileSystem.readDirectoryAsync(await getCacheFolder());
 }
 
-async function deleteCachedMeme(meme: Meme) {
-  await FileSystem.deleteAsync(await getCachedMemeFilename(meme));
+export async function deleteCachedMeme(meme: Meme) {
+  try {
+    await FileSystem.deleteAsync(await getCachedMemeFilename(meme));
+  } catch (error) {}
 }
 
 async function evictOldCacheEntries() {

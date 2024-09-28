@@ -131,9 +131,11 @@ export default function SearchScreen() {
     setMainContent(component);
   };
 
+  const searchingActive = searchQuery.length > 1;
+
   useEffect(() => {
     // single letter doesn't make a lot of sense, and on some API's returns nothing.
-    if (searchQuery.length > 1) {
+    if (searchingActive) {
       doSearch();
     } else {
       showRecentlyUsedMemesOrHelpInfo();
@@ -144,7 +146,14 @@ export default function SearchScreen() {
     return (
       <OpenedMemeDisplay
         meme={openedMeme}
-        onClose={() => setOpenedMeme(null)}
+        onClose={() => {
+          setOpenedMeme(null);
+          if (!searchingActive) {
+            // update recently used list if being displayed
+            showRecentlyUsedMemesOrHelpInfo();
+          }
+        }}
+        showDeleteButton={!searchingActive}
       />
     );
   }
