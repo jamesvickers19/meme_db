@@ -4,7 +4,7 @@ import axios from "axios";
 import cheerio from "react-native-cheerio";
 import ClearableTextInput from "../ClearableTextInput";
 import Toast from "react-native-toast-message";
-import { Meme } from "../types";
+import { imgflipV1, Meme } from "../types";
 import { MemeGrid } from "../components/MemeGrid";
 import * as MemeCache from "../MemeCache";
 import { copyMemeToClipboard } from "../CopyMeme";
@@ -25,7 +25,7 @@ async function useMemeSearch(query: string): Promise<Meme[]> {
         const imgElem = $(link).find("img");
         const thumbUri = "https:" + imgElem.attr("src");
         const href = link.attr("href");
-        const result = { memeName, href, thumbUri };
+        const result = { memeName, href, thumbUri, version: imgflipV1 };
         return result;
       })
       .get() as Meme[];
