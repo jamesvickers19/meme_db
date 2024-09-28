@@ -64,7 +64,6 @@ function deleteAllRecentlyUsedMemes() {
     },
     {
       text: "OK",
-      // TODO probably need to reload somehow
       onPress: async () => await MemeCache.deleteAllCachedMemes(),
     },
   ]);
@@ -73,9 +72,11 @@ function deleteAllRecentlyUsedMemes() {
 const RecentlyUsedMemesDisplay = ({
   recentlyUsedMemes,
   onMemePress,
+  onRemoveAll,
 }: {
   recentlyUsedMemes: Meme[];
   onMemePress: (meme: Meme) => void;
+  onRemoveAll: () => void;
 }) => {
   return (
     <>
@@ -97,7 +98,10 @@ const RecentlyUsedMemesDisplay = ({
         >
           <TouchableOpacity
             style={{ marginLeft: 0 }}
-            onPress={deleteAllRecentlyUsedMemes}
+            onPress={() => {
+              deleteAllRecentlyUsedMemes();
+              onRemoveAll();
+            }}
           >
             <AntDesign name="delete" size={32} color="red" />
           </TouchableOpacity>
@@ -148,6 +152,7 @@ export default function SearchScreen() {
   };
 
   const showRecentlyUsedMemesOrHelpInfo = async () => {
+    console.log("******* showRecentlyUsedMemesOrHelpInfo");
     const recentlyUsedMemes = await MemeCache.getCachedMemes();
     const component =
       recentlyUsedMemes.length === 0 ? (
@@ -156,6 +161,7 @@ export default function SearchScreen() {
         <RecentlyUsedMemesDisplay
           recentlyUsedMemes={recentlyUsedMemes}
           onMemePress={onMemeGridPress}
+          onRemoveAll={async () => await showRecentlyUsedMemesOrHelpInfo()} // re-load page, but not working
         />
       );
     setMainContent(component);
