@@ -23,7 +23,7 @@ const ClearableTextInput: React.FC<ClearableTextInputProps> = ({
     setText("");
     // set focus to TextInput
     if (inputRef.current) {
-      //inputRef.current.focus(); // Focus the TextInput
+      inputRef.current.focus(); // Focus the TextInput
     }
   };
 
