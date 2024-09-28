@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import axios from "axios";
 import cheerio from "react-native-cheerio";
 import ClearableTextInput from "../ClearableTextInput";
@@ -10,6 +10,7 @@ import * as MemeCache from "../MemeCache";
 import { copyMemeToClipboard } from "../CopyMeme";
 import { OpenedMemeDisplay } from "./OpenedMeme";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { AntDesign } from "@expo/vector-icons";
 
 async function useMemeSearch(query: string): Promise<Meme[]> {
   try {
@@ -55,6 +56,20 @@ const onMemeGridLongPress = async (meme: Meme) => {
   }
 };
 
+function deleteAllRecentlyUsedMemes() {
+  Alert.alert("Confirm", "Remove all memes from recently used?", [
+    {
+      text: "Cancel",
+      style: "cancel",
+    },
+    {
+      text: "OK",
+      // TODO probably need to reload somehow
+      onPress: async () => await MemeCache.deleteAllCachedMemes(),
+    },
+  ]);
+}
+
 const RecentlyUsedMemesDisplay = ({
   recentlyUsedMemes,
   onMemePress,
@@ -69,9 +84,24 @@ const RecentlyUsedMemesDisplay = ({
           alignItems: "center",
           justifyContent: "center",
           marginTop: 10,
+          flexDirection: "row",
         }}
       >
         <Text style={{ fontWeight: "bold", fontSize: 18 }}>Recently Used</Text>
+        <View
+          style={{
+            position: "absolute",
+            right: 20,
+            bottom: -4,
+          }}
+        >
+          <TouchableOpacity
+            style={{ marginLeft: 0 }}
+            onPress={deleteAllRecentlyUsedMemes}
+          >
+            <AntDesign name="delete" size={32} color="red" />
+          </TouchableOpacity>
+        </View>
       </View>
       <MemeGrid
         memes={recentlyUsedMemes}
