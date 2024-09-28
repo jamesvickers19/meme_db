@@ -9,7 +9,7 @@ import {
   Alert,
 } from "react-native";
 import Toast from "react-native-toast-message";
-import { copyMemeToClipboard } from "../CopyMeme";
+import { copyMemeToClipboardAndCache } from "../CopyMeme";
 import { Meme } from "../types";
 import { useState } from "react";
 import { highQualityImageUri } from "../MemeUtils";
@@ -65,7 +65,9 @@ export const OpenedMemeDisplay = ({
         (long press to copy to cliboard)
       </Text>
       <View style={{ justifyContent: "center" }}>
-        <TouchableOpacity onLongPress={() => copyMemeToClipboard(meme)}>
+        <TouchableOpacity
+          onLongPress={async () => await copyMemeToClipboardAndCache(meme)}
+        >
           <Image
             onError={() => setImageError(true)}
             source={{

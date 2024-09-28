@@ -7,7 +7,7 @@ import Toast from "react-native-toast-message";
 import { imgflipV1, Meme } from "../types";
 import { MemeGrid } from "../components/MemeGrid";
 import * as MemeCache from "../MemeCache";
-import { copyMemeToClipboard } from "../CopyMeme";
+import { copyMemeToClipboardAndCache } from "../CopyMeme";
 import { OpenedMemeDisplay } from "./OpenedMeme";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -49,12 +49,6 @@ const AppHelpDisplay = () => {
   );
 };
 
-const onMemeGridLongPress = async (meme: Meme) => {
-  if (await copyMemeToClipboard(meme)) {
-    await MemeCache.addMemeToCache(meme);
-  }
-};
-
 const RecentlyUsedMemesDisplay = ({
   recentlyUsedMemes,
   onMemePress,
@@ -75,7 +69,9 @@ const RecentlyUsedMemesDisplay = ({
       </View>
       <MemeGrid
         memes={recentlyUsedMemes}
-        onMemeLongPress={onMemeGridLongPress}
+        onMemeLongPress={async (meme) =>
+          await copyMemeToClipboardAndCache(meme)
+        }
         onMemePress={onMemePress}
       ></MemeGrid>
     </>
@@ -112,7 +108,9 @@ export default function SearchScreen() {
         memes={results || []}
         noResultsComponent={isSearching ? <View /> : <NoSearchResultsDisplay />}
         onMemePress={onMemeGridPress}
-        onMemeLongPress={onMemeGridLongPress}
+        onMemeLongPress={async (meme) =>
+          await copyMemeToClipboardAndCache(meme)
+        }
       ></MemeGrid>
     );
   };

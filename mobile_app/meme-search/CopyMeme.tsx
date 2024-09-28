@@ -3,8 +3,15 @@ import { showMsg } from "./Utils";
 import * as FileSystem from "expo-file-system";
 import * as Clipboard from "expo-clipboard";
 import { highQualityImageUri } from "./MemeUtils";
+import * as MemeCache from "./MemeCache";
 
-export async function copyMemeToClipboard(meme: Meme) {
+export async function copyMemeToClipboardAndCache(meme: Meme) {
+  if (await copyMemeToClipboard(meme)) {
+    await MemeCache.addMemeToCache(meme);
+  }
+}
+
+async function copyMemeToClipboard(meme: Meme) {
   // try to get better image quality if possible by going to full source image
   // not always findable, so fall back to thumbUri if needed.
   const possibleUris = [highQualityImageUri(meme), meme.thumbUri];
