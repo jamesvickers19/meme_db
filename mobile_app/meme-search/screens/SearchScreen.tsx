@@ -7,6 +7,8 @@ import Toast from "react-native-toast-message";
 import { Meme } from "../types";
 import { MemeGrid } from "../components/MemeGrid";
 import * as MemeCache from "../MemeCache";
+import { copyMemeToClipboard } from "../CopyMeme";
+import { OpenedMemeDisplay } from "./OpenedMeme";
 
 async function useMemeSearch(query: string): Promise<Meme[]> {
   try {
@@ -46,10 +48,18 @@ const AppHelpDisplay = () => {
   );
 };
 
+const onMemeGridLongPress = async (meme: Meme) => {
+  if (await copyMemeToClipboard(meme)) {
+    await MemeCache.addMemeToCache(meme);
+  }
+};
+
 const RecentlyUsedMemesDisplay = ({
   recentlyUsedMemes,
+  onMemePress,
 }: {
   recentlyUsedMemes: Meme[];
+  onMemePress: (meme: Meme) => void;
 }) => {
   return (
     <>
@@ -64,9 +74,8 @@ const RecentlyUsedMemesDisplay = ({
       </View>
       <MemeGrid
         memes={recentlyUsedMemes}
-        onMemePressed={async (meme: Meme) => {
-          await MemeCache.addMemeToCache(meme); // this updates the last used time in the file
-        }}
+        onMemeLongPress={onMemeGridLongPress}
+        onMemePress={onMemePress}
       ></MemeGrid>
     </>
   );
@@ -90,6 +99,8 @@ export default function SearchScreen() {
   const [searchQuery, setSearchQuery] = useState("");
   const [isSearching, setIsSearching] = useState(false);
   const [mainContent, setMainContent] = useState<React.ReactElement>(<View />);
+  const [openedMeme, setOpenedMeme] = useState<Meme | null>(null);
+  const onMemeGridPress = (meme: Meme) => setOpenedMeme(meme);
 
   const doSearch = async () => {
     setIsSearching(true);
@@ -99,9 +110,8 @@ export default function SearchScreen() {
       <MemeGrid
         memes={results || []}
         noResultsComponent={isSearching ? <View /> : <NoSearchResultsDisplay />}
-        onMemePressed={async (meme: Meme) =>
-          await MemeCache.addMemeToCache(meme)
-        }
+        onMemePress={onMemeGridPress}
+        onMemeLongPress={onMemeGridLongPress}
       ></MemeGrid>
     );
   };
@@ -112,7 +122,10 @@ export default function SearchScreen() {
       recentlyUsedMemes.length === 0 ? (
         <AppHelpDisplay />
       ) : (
-        <RecentlyUsedMemesDisplay recentlyUsedMemes={recentlyUsedMemes} />
+        <RecentlyUsedMemesDisplay
+          recentlyUsedMemes={recentlyUsedMemes}
+          onMemePress={onMemeGridPress}
+        />
       );
     setMainContent(component);
   };
@@ -125,6 +138,15 @@ export default function SearchScreen() {
       showRecentlyUsedMemesOrHelpInfo();
     }
   }, [searchQuery]);
+
+  if (openedMeme) {
+    return (
+      <OpenedMemeDisplay
+        meme={openedMeme}
+        onClose={() => setOpenedMeme(null)}
+      />
+    );
+  }
 
   return (
     <View style={styles.container}>
