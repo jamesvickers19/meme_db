@@ -3,6 +3,8 @@ import { Image, StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import Toast from "react-native-toast-message";
 import { copyMemeToClipboard } from "../CopyMeme";
 import { Meme } from "../types";
+import { useState } from "react";
+import { highQualityImageUri } from "../MemeUtils";
 
 export const OpenedMemeDisplay = ({
   meme,
@@ -11,6 +13,7 @@ export const OpenedMemeDisplay = ({
   meme: Meme;
   onClose: () => void;
 }) => {
+  const [imageError, setImageError] = useState(false);
   // TODO make more sense as a modal?
   return (
     <View style={styles.openedMemeContainer}>
@@ -26,9 +29,10 @@ export const OpenedMemeDisplay = ({
       <View style={{ justifyContent: "center" }}>
         <TouchableOpacity onLongPress={() => copyMemeToClipboard(meme)}>
           <Image
+            onError={() => setImageError(true)}
             source={{
-              // TODO use full size image uri if available; fallback uri's ?
-              uri: meme.thumbUri,
+              // use full size image uri if available
+              uri: imageError ? meme.thumbUri : highQualityImageUri(meme),
             }}
             style={styles.fullScreenImage}
             resizeMode="contain"

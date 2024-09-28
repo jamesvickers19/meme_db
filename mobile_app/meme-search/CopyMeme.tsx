@@ -2,11 +2,12 @@ import { Meme } from "./types";
 import { showMsg } from "./Utils";
 import * as FileSystem from "expo-file-system";
 import * as Clipboard from "expo-clipboard";
+import { highQualityImageUri } from "./MemeUtils";
 
 export async function copyMemeToClipboard(meme: Meme) {
   // try to get better image quality if possible by going to full source image
   // not always findable, so fall back to thumbUri if needed.
-  const possibleUris = [`https://imgflip.com/s${meme.href}.jpg`, meme.thumbUri];
+  const possibleUris = [highQualityImageUri(meme), meme.thumbUri];
   for (const imgUri of possibleUris) {
     try {
       const localUri =

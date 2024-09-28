@@ -14,3 +14,7 @@ const hashCode = (s: string) => {
 export function hashMeme(meme: Meme): string {
   return (hashCode(meme.thumbUri) + hashCode(meme.href)).toString();
 }
+
+export function highQualityImageUri(meme: Meme) {
+  return `https://imgflip.com/s${meme.href}.jpg`;
+}
