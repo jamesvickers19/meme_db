@@ -12,7 +12,7 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true,
+      "supportsTablet": false,
       "bundleIdentifier": "com.jamesvickers19.memesearch"
     },
     "android": {
@@ -20,7 +20,14 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.jamesvickers19.memesearch"
+      "package": "com.jamesvickers19.memesearch",
+      "intentFilters": [
+        {
+          "action": "android.intent.action.VIEW",
+          "category": "android.intent.category.DEFAULT"
+        }
+      ],
+      "supportsTablet": false
     },
     "web": {
       "favicon": "./assets/favicon.png"
