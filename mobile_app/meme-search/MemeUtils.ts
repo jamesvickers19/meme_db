@@ -16,5 +16,7 @@ export function hashMeme(meme: Meme): string {
 }
 
 export function highQualityImageUri(meme: Meme) {
-  return `https://imgflip.com/s${meme.href}.jpg`;
+  // thumb URI's look like https://i.imgflip.com/4/1g8my4.jpg
+  // turns out if you take out the /4, it give a higher quality full image.
+  return meme.thumbUri.replace(".com/4/", ".com/");
 }
