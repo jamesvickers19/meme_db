@@ -5,7 +5,6 @@ import {
   Text,
   View,
   TouchableOpacity,
-  SafeAreaView,
   Alert,
 } from "react-native";
 import Toast from "react-native-toast-message";
@@ -44,7 +43,7 @@ export const OpenedMemeDisplay = ({
   };
   // TODO make more sense as a modal?
   return (
-    <SafeAreaView style={styles.openedMemeContainer}>
+    <View style={styles.openedMemeContainer}>
       <View style={styles.controlsContainer}>
         <TouchableOpacity style={{ marginLeft: 7 }} onPress={() => onClose()}>
           <AntDesign name="leftcircle" size={32} color="black" />
@@ -80,7 +79,7 @@ export const OpenedMemeDisplay = ({
         </TouchableOpacity>
       </View>
       <Toast />
-    </SafeAreaView>
+    </View>
   );
 };
 
@@ -88,6 +87,7 @@ const styles = StyleSheet.create({
   openedMemeContainer: {
     flex: 1,
     backgroundColor: "white",
+    marginTop: 60,
   },
   controlsContainer: {
     flexDirection: "row",
