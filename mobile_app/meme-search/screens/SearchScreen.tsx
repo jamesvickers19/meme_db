@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StatusBar, StyleSheet, Text, View } from "react-native";
 import axios from "axios";
 import cheerio from "react-native-cheerio";
 import ClearableTextInput from "../ClearableTextInput";
@@ -157,6 +157,7 @@ export default function SearchScreen() {
 
   return (
     <View style={styles.container}>
+      <StatusBar translucent={true}></StatusBar>
       <ClearableTextInput
         text={searchQuery}
         setText={setSearchQuery}
