@@ -9,6 +9,7 @@ import { MemeGrid } from "../components/MemeGrid";
 import * as MemeCache from "../MemeCache";
 import { copyMemeToClipboardAndCache } from "../CopyMeme";
 import { OpenedMemeDisplay } from "./OpenedMeme";
+import { ImgFlipGeneralAttribution } from "../components/ImgFlipAttribution";
 
 async function useMemeSearch(query: string): Promise<Meme[]> {
   try {
@@ -163,6 +164,7 @@ export default function SearchScreen() {
         setText={setSearchQuery}
         placeholder="Search for memes"
       />
+      <ImgFlipGeneralAttribution />
       {mainContent}
       <Toast />
     </View>

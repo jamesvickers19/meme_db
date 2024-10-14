@@ -13,6 +13,7 @@ import { Meme } from "../types";
 import { useState } from "react";
 import { highQualityImageUri } from "../MemeUtils";
 import * as MemeCache from "../MemeCache";
+import { ImgFlipMemeTemplateAttribution } from "../components/ImgFlipAttribution";
 
 export interface OpenedMemeDisplayProps {
   meme: Meme;
@@ -63,6 +64,7 @@ export const OpenedMemeDisplay = ({
       <Text style={{ textAlign: "center", fontWeight: "bold", fontSize: 16 }}>
         (long press to copy to cliboard)
       </Text>
+      <ImgFlipMemeTemplateAttribution meme={meme} />
       <View style={{ justifyContent: "center" }}>
         <TouchableOpacity
           onLongPress={async () => await copyMemeToClipboardAndCache(meme)}
