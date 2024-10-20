@@ -1,5 +1,12 @@
 import { useEffect, useState } from "react";
-import { StatusBar, StyleSheet, Text, View } from "react-native";
+import {
+  Alert,
+  StatusBar,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import axios from "axios";
 import cheerio from "react-native-cheerio";
 import ClearableTextInput from "../ClearableTextInput";
@@ -10,6 +17,7 @@ import * as MemeCache from "../MemeCache";
 import { copyMemeToClipboardAndCache } from "../CopyMeme";
 import { OpenedMemeDisplay } from "./OpenedMeme";
 import { ImgFlipGeneralAttribution } from "../components/ImgFlipAttribution";
+import { AntDesign } from "@expo/vector-icons";
 
 async function useMemeSearch(query: string): Promise<Meme[]> {
   try {
@@ -49,12 +57,27 @@ const AppHelpDisplay = () => {
   );
 };
 
+function deleteAllRecentlyUsedMemes() {
+  Alert.alert("Confirm", "Remove all memes from recently used?", [
+    {
+      text: "Cancel",
+      style: "cancel",
+    },
+    {
+      text: "OK",
+      onPress: async () => await MemeCache.deleteAllCachedMemes(),
+    },
+  ]);
+}
+
 const RecentlyUsedMemesDisplay = ({
   recentlyUsedMemes,
   onMemePress,
+  onRemoveAll,
 }: {
   recentlyUsedMemes: Meme[];
   onMemePress: (meme: Meme) => void;
+  onRemoveAll: () => void;
 }) => {
   return (
     <>
@@ -66,6 +89,15 @@ const RecentlyUsedMemesDisplay = ({
         }}
       >
         <Text style={{ fontWeight: "bold", fontSize: 18 }}>Recently Used</Text>
+        <TouchableOpacity
+          style={{ marginLeft: 0 }}
+          onPress={() => {
+            deleteAllRecentlyUsedMemes();
+            onRemoveAll();
+          }}
+        >
+          <AntDesign name="delete" size={32} color="red" />
+        </TouchableOpacity>
       </View>
       <MemeGrid
         memes={recentlyUsedMemes}
@@ -124,6 +156,7 @@ export default function SearchScreen() {
         <RecentlyUsedMemesDisplay
           recentlyUsedMemes={recentlyUsedMemes}
           onMemePress={onMemeGridPress}
+          onRemoveAll={async () => await showRecentlyUsedMemesOrHelpInfo()} // re-load page, but not working
         />
       );
     setMainContent(component);
