@@ -57,19 +57,6 @@ const AppHelpDisplay = () => {
   );
 };
 
-function deleteAllRecentlyUsedMemes() {
-  Alert.alert("Confirm", "Remove all memes from recently used?", [
-    {
-      text: "Cancel",
-      style: "cancel",
-    },
-    {
-      text: "OK",
-      onPress: async () => await MemeCache.deleteAllCachedMemes(),
-    },
-  ]);
-}
-
 const RecentlyUsedMemesDisplay = ({
   recentlyUsedMemes,
   onMemePress,
@@ -86,14 +73,26 @@ const RecentlyUsedMemesDisplay = ({
           alignItems: "center",
           justifyContent: "center",
           marginTop: 10,
+          flexDirection: "row",
         }}
       >
         <Text style={{ fontWeight: "bold", fontSize: 18 }}>Recently Used</Text>
         <TouchableOpacity
           style={{ marginLeft: 0 }}
           onPress={() => {
-            deleteAllRecentlyUsedMemes();
-            onRemoveAll();
+            Alert.alert("Confirm", "Remove all memes from recently used?", [
+              {
+                text: "Cancel",
+                style: "cancel",
+              },
+              {
+                text: "OK",
+                onPress: async () => {
+                  await MemeCache.deleteAllCachedMemes();
+                  onRemoveAll();
+                },
+              },
+            ]);
           }}
         >
           <AntDesign name="delete" size={32} color="red" />
@@ -156,7 +155,7 @@ export default function SearchScreen() {
         <RecentlyUsedMemesDisplay
           recentlyUsedMemes={recentlyUsedMemes}
           onMemePress={onMemeGridPress}
-          onRemoveAll={async () => await showRecentlyUsedMemesOrHelpInfo()} // re-load page, but not working
+          onRemoveAll={async () => await showRecentlyUsedMemesOrHelpInfo()}
         />
       );
     setMainContent(component);
