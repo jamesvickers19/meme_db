@@ -62,14 +62,15 @@ export const OpenedMemeDisplay = ({
         >
           {meme.memeName}
         </Text>
-        {showDeleteButton && (
-          <TouchableOpacity
-            style={{ marginRight: 7 }}
-            onPress={() => onRemove(meme)}
-          >
-            <AntDesign name="delete" size={32} color="red" />
-          </TouchableOpacity>
-        )}
+        <TouchableOpacity
+          style={{
+            ...(showDeleteButton ? {} : { opacity: 0, height: 0 }),
+            marginRight: 7,
+          }}
+          onPress={() => onRemove(meme)}
+        >
+          <AntDesign name="delete" size={32} color="red" />
+        </TouchableOpacity>
       </View>
       <Text
         style={{
