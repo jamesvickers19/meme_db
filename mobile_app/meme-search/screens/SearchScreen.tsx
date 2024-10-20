@@ -5,6 +5,7 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
+  useColorScheme,
   View,
 } from "react-native";
 import axios from "axios";
@@ -46,10 +47,11 @@ async function useMemeSearch(query: string): Promise<Meme[]> {
 }
 
 const AppHelpDisplay = () => {
+  const color = useColorScheme() === "dark" ? "white" : "black";
   return (
     <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-      <Text style={{ fontSize: 80, color: "white" }}>☝️</Text>
-      <Text style={styles.noSearchQueryText}>
+      <Text style={{ fontSize: 80, color: color }}>☝️</Text>
+      <Text style={[styles.noSearchQueryText, { color }]}>
         Use the search bar to find memes, then long press on them to copy to
         clipboard!
       </Text>
@@ -66,6 +68,7 @@ const RecentlyUsedMemesDisplay = ({
   onMemePress: (meme: Meme) => void;
   onRemoveAll: () => void;
 }) => {
+  const color = useColorScheme() === "dark" ? "white" : "black";
   return (
     <>
       <View
@@ -80,7 +83,7 @@ const RecentlyUsedMemesDisplay = ({
       >
         <Text
           style={{
-            color: "white",
+            color: color,
             fontWeight: "bold",
             fontSize: 18,
             textAlign: "center",
@@ -121,6 +124,7 @@ const RecentlyUsedMemesDisplay = ({
 };
 
 const NoSearchResultsDisplay = () => {
+  const color = useColorScheme() === "dark" ? "white" : "black";
   return (
     <View
       style={{
@@ -129,7 +133,7 @@ const NoSearchResultsDisplay = () => {
         marginTop: 10,
       }}
     >
-      <Text style={{ color: "white", fontWeight: "bold", fontSize: 24 }}>
+      <Text style={{ color: color, fontWeight: "bold", fontSize: 24 }}>
         No results found
       </Text>
     </View>
@@ -142,6 +146,7 @@ export default function SearchScreen() {
   const [mainContent, setMainContent] = useState<React.ReactElement>(<View />);
   const [openedMeme, setOpenedMeme] = useState<Meme | null>(null);
   const onMemeGridPress = (meme: Meme) => setOpenedMeme(meme);
+  const colorScheme = useColorScheme();
 
   const doSearch = async () => {
     setIsSearching(true);
@@ -202,7 +207,12 @@ export default function SearchScreen() {
   }
 
   return (
-    <View style={styles.container}>
+    <View
+      style={[
+        styles.container,
+        { backgroundColor: colorScheme === "dark" ? "black" : "white" },
+      ]}
+    >
       <StatusBar translucent={true}></StatusBar>
       <ClearableTextInput
         text={searchQuery}
@@ -218,14 +228,12 @@ export default function SearchScreen() {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "black",
     justifyContent: "center",
     flex: 1,
   },
   noSearchQueryText: {
     fontSize: 28,
     fontWeight: "bold",
-    color: "white",
     margin: 10,
   },
 });

@@ -6,6 +6,7 @@ import {
   View,
   TouchableOpacity,
   Alert,
+  useColorScheme,
 } from "react-native";
 import Toast from "react-native-toast-message";
 import { copyMemeToClipboardAndCache } from "../CopyMeme";
@@ -26,6 +27,9 @@ export const OpenedMemeDisplay = ({
   onClose,
   showDeleteButton,
 }: OpenedMemeDisplayProps) => {
+  const colorScheme = useColorScheme();
+  const backgroundColor = colorScheme === "dark" ? "black" : "color";
+  const color = colorScheme === "dark" ? "white" : "black";
   const [imageError, setImageError] = useState(false);
   const onRemove = (meme: Meme) => {
     Alert.alert("Confirm", "Remove this meme from recently used?", [
@@ -43,14 +47,14 @@ export const OpenedMemeDisplay = ({
     ]);
   };
   return (
-    <View style={styles.openedMemeContainer}>
-      <View style={styles.controlsContainer}>
+    <View style={[styles.openedMemeContainer, { backgroundColor }]}>
+      <View style={[styles.controlsContainer, { backgroundColor }]}>
         <TouchableOpacity style={{ marginLeft: 7 }} onPress={() => onClose()}>
-          <AntDesign name="leftcircle" size={32} color="white" />
+          <AntDesign name="leftcircle" size={32} color={color} />
         </TouchableOpacity>
         <Text
           style={{
-            color: "white",
+            color: color,
             textAlign: "center",
             fontWeight: "bold",
             fontSize: 24,
@@ -69,7 +73,7 @@ export const OpenedMemeDisplay = ({
       </View>
       <Text
         style={{
-          color: "white",
+          color: color,
           textAlign: "center",
           fontWeight: "bold",
           fontSize: 16,
@@ -78,7 +82,7 @@ export const OpenedMemeDisplay = ({
         (long press to copy to cliboard)
       </Text>
       <ImgFlipMemeTemplateAttribution meme={meme} />
-      <View style={{ backgroundColor: "black", justifyContent: "center" }}>
+      <View style={{ backgroundColor, justifyContent: "center" }}>
         <TouchableOpacity
           onLongPress={async () => await copyMemeToClipboardAndCache(meme)}
         >
@@ -101,10 +105,8 @@ export const OpenedMemeDisplay = ({
 const styles = StyleSheet.create({
   openedMemeContainer: {
     flex: 1,
-    backgroundColor: "black",
   },
   controlsContainer: {
-    backgroundColor: "black",
     flexDirection: "row",
     justifyContent: "space-between",
     marginBottom: 15,
