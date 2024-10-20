@@ -4,6 +4,7 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
+  useColorScheme,
   View,
 } from "react-native";
 
@@ -18,6 +19,7 @@ const ClearableTextInput: React.FC<ClearableTextInputProps> = ({
   setText,
   placeholder,
 }: ClearableTextInputProps) => {
+  const color = useColorScheme() === "dark" ? "white" : "black";
   const inputRef = useRef<any>(null);
   const clearText = () => {
     setText("");
@@ -31,15 +33,16 @@ const ClearableTextInput: React.FC<ClearableTextInputProps> = ({
     <View style={styles.container}>
       <TextInput
         ref={inputRef}
-        style={styles.input}
+        style={[styles.input, { color }]}
         value={text}
         onChangeText={setText}
         placeholder={placeholder}
+        placeholderTextColor={color}
         returnKeyType="done"
       />
       {text.length > 0 && (
         <TouchableOpacity onPress={clearText} style={styles.clearButton}>
-          <Text style={styles.clearButtonText}>×</Text>
+          <Text style={[styles.clearButtonText, { color }]}>×</Text>
         </TouchableOpacity>
       )}
     </View>
@@ -56,7 +59,6 @@ const styles = StyleSheet.create({
   input: {
     fontSize: 28,
     height: 40,
-    color: "black", // text color
     borderColor: "blue",
     borderWidth: 2,
     borderRadius: 5,
@@ -72,7 +74,6 @@ const styles = StyleSheet.create({
   },
   clearButtonText: {
     fontSize: 28,
-    color: "#888",
   },
 });
 

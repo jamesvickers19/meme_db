@@ -6,6 +6,7 @@ import {
   View,
   TouchableOpacity,
   Alert,
+  useColorScheme,
 } from "react-native";
 import Toast from "react-native-toast-message";
 import { copyMemeToClipboardAndCache } from "../CopyMeme";
@@ -26,6 +27,9 @@ export const OpenedMemeDisplay = ({
   onClose,
   showDeleteButton,
 }: OpenedMemeDisplayProps) => {
+  const colorScheme = useColorScheme();
+  const backgroundColor = colorScheme === "dark" ? "black" : "color";
+  const color = colorScheme === "dark" ? "white" : "black";
   const [imageError, setImageError] = useState(false);
   const onRemove = (meme: Meme) => {
     Alert.alert("Confirm", "Remove this meme from recently used?", [
@@ -42,30 +46,44 @@ export const OpenedMemeDisplay = ({
       },
     ]);
   };
-  // TODO make more sense as a modal?
   return (
-    <View style={styles.openedMemeContainer}>
-      <View style={styles.controlsContainer}>
+    <View style={[styles.openedMemeContainer, { backgroundColor }]}>
+      <View style={[styles.controlsContainer, { backgroundColor }]}>
         <TouchableOpacity style={{ marginLeft: 7 }} onPress={() => onClose()}>
-          <AntDesign name="leftcircle" size={32} color="black" />
+          <AntDesign name="leftcircle" size={32} color={color} />
         </TouchableOpacity>
-        {showDeleteButton && (
-          <TouchableOpacity
-            style={{ marginRight: 7 }}
-            onPress={() => onRemove(meme)}
-          >
-            <AntDesign name="delete" size={32} color="red" />
-          </TouchableOpacity>
-        )}
+        <Text
+          style={{
+            color: color,
+            textAlign: "center",
+            fontWeight: "bold",
+            fontSize: 24,
+          }}
+        >
+          {meme.memeName}
+        </Text>
+        <TouchableOpacity
+          style={{
+            ...(showDeleteButton ? {} : { opacity: 0, height: 0 }),
+            marginRight: 7,
+          }}
+          onPress={() => onRemove(meme)}
+        >
+          <AntDesign name="delete" size={32} color="red" />
+        </TouchableOpacity>
       </View>
-      <Text style={{ textAlign: "center", fontWeight: "bold", fontSize: 24 }}>
-        {meme.memeName}
-      </Text>
-      <Text style={{ textAlign: "center", fontWeight: "bold", fontSize: 16 }}>
+      <Text
+        style={{
+          color: color,
+          textAlign: "center",
+          fontWeight: "bold",
+          fontSize: 16,
+        }}
+      >
         (long press to copy to cliboard)
       </Text>
       <ImgFlipMemeTemplateAttribution meme={meme} />
-      <View style={{ justifyContent: "center" }}>
+      <View style={{ backgroundColor, justifyContent: "center" }}>
         <TouchableOpacity
           onLongPress={async () => await copyMemeToClipboardAndCache(meme)}
         >
@@ -88,13 +106,12 @@ export const OpenedMemeDisplay = ({
 const styles = StyleSheet.create({
   openedMemeContainer: {
     flex: 1,
-    backgroundColor: "white",
-    marginTop: 60,
   },
   controlsContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
     marginBottom: 15,
+    marginTop: 60,
   },
   fullScreenImage: {
     width: "100%",

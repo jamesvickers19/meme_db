@@ -6,6 +6,7 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
+  useColorScheme,
 } from "react-native";
 import { hashMeme } from "../MemeUtils";
 
@@ -27,14 +28,25 @@ export function MemeGrid({
   onMemePress,
   onMemeLongPress,
 }: MemeGridProps) {
+  const colorScheme = useColorScheme();
   const renderMeme = ({ item }: { item: Meme }) => {
     return (
       <TouchableOpacity
         onLongPress={() => onMemeLongPress(item)}
         onPress={() => onMemePress?.(item)}
-        style={styles.memeGridContainer}
+        style={[
+          styles.memeGridContainer,
+          { backgroundColor: colorScheme === "dark" ? "black" : "white" },
+        ]}
       >
-        <Text style={styles.memeTitle}>{item.memeName}</Text>
+        <Text
+          style={[
+            styles.memeTitle,
+            { color: colorScheme === "dark" ? "white" : "black" },
+          ]}
+        >
+          {item.memeName}
+        </Text>
         <Image source={{ uri: item.thumbUri }} style={styles.image} />
       </TouchableOpacity>
     );
@@ -62,7 +74,6 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     borderWidth: 1,
     borderColor: "blue",
-    backgroundColor: "#fff",
     elevation: 3, // For Android shadow
     shadowColor: "#000", // For iOS shadow
     shadowOffset: { width: 0, height: 2 },

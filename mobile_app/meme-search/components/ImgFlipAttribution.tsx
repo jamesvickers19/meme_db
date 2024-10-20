@@ -1,13 +1,14 @@
-import { Linking, StyleSheet, Text, View } from "react-native";
+import { Linking, StyleSheet, Text, useColorScheme, View } from "react-native";
 import { Meme } from "../types";
 
 export const ImgFlipGeneralAttribution = () => {
   const handleLinkPress = () => {
     Linking.openURL("https://imgflip.com");
   };
+  const color = useColorScheme() === "dark" ? "white" : "black";
   return (
     <View style={styles.imgflipAttributionContainer}>
-      <Text style={{ fontSize: 16 }}>
+      <Text style={{ color, fontSize: 16 }}>
         Memes powered by{" "}
         <Text
           style={{
