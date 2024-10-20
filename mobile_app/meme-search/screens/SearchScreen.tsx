@@ -1,5 +1,12 @@
 import { useEffect, useState } from "react";
-import { StatusBar, StyleSheet, Text, View } from "react-native";
+import {
+  Alert,
+  StatusBar,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import axios from "axios";
 import cheerio from "react-native-cheerio";
 import ClearableTextInput from "../ClearableTextInput";
@@ -10,6 +17,7 @@ import * as MemeCache from "../MemeCache";
 import { copyMemeToClipboardAndCache } from "../CopyMeme";
 import { OpenedMemeDisplay } from "./OpenedMeme";
 import { ImgFlipGeneralAttribution } from "../components/ImgFlipAttribution";
+import { AntDesign } from "@expo/vector-icons";
 
 async function useMemeSearch(query: string): Promise<Meme[]> {
   try {
@@ -52,20 +60,47 @@ const AppHelpDisplay = () => {
 const RecentlyUsedMemesDisplay = ({
   recentlyUsedMemes,
   onMemePress,
+  onRemoveAll,
 }: {
   recentlyUsedMemes: Meme[];
   onMemePress: (meme: Meme) => void;
+  onRemoveAll: () => void;
 }) => {
   return (
     <>
       <View
         style={{
+          marginTop: 10,
+          flexDirection: "row",
           alignItems: "center",
           justifyContent: "center",
-          marginTop: 10,
+          width: "100%",
+          position: "relative",
         }}
       >
-        <Text style={{ fontWeight: "bold", fontSize: 18 }}>Recently Used</Text>
+        <Text style={{ fontWeight: "bold", fontSize: 18, textAlign: "center" }}>
+          Recently Used
+        </Text>
+        <TouchableOpacity
+          style={{ position: "absolute", right: 10 }}
+          onPress={() => {
+            Alert.alert("Confirm", "Remove all memes from recently used?", [
+              {
+                text: "Cancel",
+                style: "cancel",
+              },
+              {
+                text: "OK",
+                onPress: async () => {
+                  await MemeCache.deleteAllCachedMemes();
+                  onRemoveAll();
+                },
+              },
+            ]);
+          }}
+        >
+          <AntDesign name="delete" size={24} color="red" />
+        </TouchableOpacity>
       </View>
       <MemeGrid
         memes={recentlyUsedMemes}
@@ -124,6 +159,7 @@ export default function SearchScreen() {
         <RecentlyUsedMemesDisplay
           recentlyUsedMemes={recentlyUsedMemes}
           onMemePress={onMemeGridPress}
+          onRemoveAll={async () => await showRecentlyUsedMemesOrHelpInfo()}
         />
       );
     setMainContent(component);

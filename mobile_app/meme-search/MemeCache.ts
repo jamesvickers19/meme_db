@@ -28,6 +28,12 @@ export async function deleteCachedMeme(meme: Meme) {
   } catch (error) {}
 }
 
+export async function deleteAllCachedMemes() {
+  try {
+    await FileSystem.deleteAsync(await getCacheFolder());
+  } catch (error) {}
+}
+
 async function evictOldCacheEntries() {
   const cachedMemeFiles = await getCachedMemeFilenames();
   const cacheSize = 100;
@@ -56,7 +62,6 @@ export async function addMemeToCache(meme: Meme) {
 }
 
 export async function getCachedMemes() {
-  //await FileSystem.deleteAsync(await getCacheFolder()); // TODO debugging code to clear cache; add button?
   const cachedMemeFiles = await getCachedMemeFilenames();
   const cachedMemes = await Promise.all(
     cachedMemeFiles.map(async (filename) => {
