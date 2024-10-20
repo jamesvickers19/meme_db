@@ -35,6 +35,7 @@ const ClearableTextInput: React.FC<ClearableTextInputProps> = ({
         value={text}
         onChangeText={setText}
         placeholder={placeholder}
+        placeholderTextColor="white"
         returnKeyType="done"
       />
       {text.length > 0 && (
@@ -56,7 +57,7 @@ const styles = StyleSheet.create({
   input: {
     fontSize: 28,
     height: 40,
-    color: "black", // text color
+    color: "white", // text color
     borderColor: "blue",
     borderWidth: 2,
     borderRadius: 5,
@@ -72,7 +73,7 @@ const styles = StyleSheet.create({
   },
   clearButtonText: {
     fontSize: 28,
-    color: "#888",
+    color: "white",
   },
 });
 

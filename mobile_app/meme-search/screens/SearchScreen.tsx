@@ -48,7 +48,7 @@ async function useMemeSearch(query: string): Promise<Meme[]> {
 const AppHelpDisplay = () => {
   return (
     <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-      <Text style={{ fontSize: 80 }}>☝️</Text>
+      <Text style={{ fontSize: 80, color: "white" }}>☝️</Text>
       <Text style={styles.noSearchQueryText}>
         Use the search bar to find memes, then long press on them to copy to
         clipboard!
@@ -78,7 +78,14 @@ const RecentlyUsedMemesDisplay = ({
           position: "relative",
         }}
       >
-        <Text style={{ fontWeight: "bold", fontSize: 18, textAlign: "center" }}>
+        <Text
+          style={{
+            color: "white",
+            fontWeight: "bold",
+            fontSize: 18,
+            textAlign: "center",
+          }}
+        >
           Recently Used
         </Text>
         <TouchableOpacity
@@ -122,7 +129,9 @@ const NoSearchResultsDisplay = () => {
         marginTop: 10,
       }}
     >
-      <Text style={{ fontWeight: "bold", fontSize: 24 }}>No results found</Text>
+      <Text style={{ color: "white", fontWeight: "bold", fontSize: 24 }}>
+        No results found
+      </Text>
     </View>
   );
 };
@@ -209,17 +218,14 @@ export default function SearchScreen() {
 
 const styles = StyleSheet.create({
   container: {
+    backgroundColor: "black",
     justifyContent: "center",
     flex: 1,
-  },
-  noSearchQueryContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
   },
   noSearchQueryText: {
     fontSize: 28,
     fontWeight: "bold",
+    color: "white",
     margin: 10,
   },
 });

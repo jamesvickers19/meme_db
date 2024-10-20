@@ -7,7 +7,7 @@ export const ImgFlipGeneralAttribution = () => {
   };
   return (
     <View style={styles.imgflipAttributionContainer}>
-      <Text style={{ fontSize: 16 }}>
+      <Text style={{ color: "white", fontSize: 16 }}>
         Memes powered by{" "}
         <Text
           style={{

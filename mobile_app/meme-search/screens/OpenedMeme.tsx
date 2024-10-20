@@ -42,13 +42,22 @@ export const OpenedMemeDisplay = ({
       },
     ]);
   };
-  // TODO make more sense as a modal?
   return (
     <View style={styles.openedMemeContainer}>
       <View style={styles.controlsContainer}>
         <TouchableOpacity style={{ marginLeft: 7 }} onPress={() => onClose()}>
-          <AntDesign name="leftcircle" size={32} color="black" />
+          <AntDesign name="leftcircle" size={32} color="white" />
         </TouchableOpacity>
+        <Text
+          style={{
+            color: "white",
+            textAlign: "center",
+            fontWeight: "bold",
+            fontSize: 24,
+          }}
+        >
+          {meme.memeName}
+        </Text>
         {showDeleteButton && (
           <TouchableOpacity
             style={{ marginRight: 7 }}
@@ -58,14 +67,18 @@ export const OpenedMemeDisplay = ({
           </TouchableOpacity>
         )}
       </View>
-      <Text style={{ textAlign: "center", fontWeight: "bold", fontSize: 24 }}>
-        {meme.memeName}
-      </Text>
-      <Text style={{ textAlign: "center", fontWeight: "bold", fontSize: 16 }}>
+      <Text
+        style={{
+          color: "white",
+          textAlign: "center",
+          fontWeight: "bold",
+          fontSize: 16,
+        }}
+      >
         (long press to copy to cliboard)
       </Text>
       <ImgFlipMemeTemplateAttribution meme={meme} />
-      <View style={{ justifyContent: "center" }}>
+      <View style={{ backgroundColor: "black", justifyContent: "center" }}>
         <TouchableOpacity
           onLongPress={async () => await copyMemeToClipboardAndCache(meme)}
         >
@@ -88,13 +101,14 @@ export const OpenedMemeDisplay = ({
 const styles = StyleSheet.create({
   openedMemeContainer: {
     flex: 1,
-    backgroundColor: "white",
-    marginTop: 60,
+    backgroundColor: "black",
   },
   controlsContainer: {
+    backgroundColor: "black",
     flexDirection: "row",
     justifyContent: "space-between",
     marginBottom: 15,
+    marginTop: 60,
   },
   fullScreenImage: {
     width: "100%",

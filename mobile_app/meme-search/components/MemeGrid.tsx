@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     borderWidth: 1,
     borderColor: "blue",
-    backgroundColor: "#fff",
+    backgroundColor: "black",
     elevation: 3, // For Android shadow
     shadowColor: "#000", // For iOS shadow
     shadowOffset: { width: 0, height: 2 },
@@ -77,6 +77,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   memeTitle: {
+    color: "white",
     marginTop: 5,
     fontSize: 16,
     textAlign: "center",
