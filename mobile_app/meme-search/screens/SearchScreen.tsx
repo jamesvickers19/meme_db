@@ -70,15 +70,19 @@ const RecentlyUsedMemesDisplay = ({
     <>
       <View
         style={{
-          alignItems: "center",
-          justifyContent: "center",
           marginTop: 10,
           flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "center",
+          width: "100%",
+          position: "relative",
         }}
       >
-        <Text style={{ fontWeight: "bold", fontSize: 18 }}>Recently Used</Text>
+        <Text style={{ fontWeight: "bold", fontSize: 18, textAlign: "center" }}>
+          Recently Used
+        </Text>
         <TouchableOpacity
-          style={{ marginLeft: 0 }}
+          style={{ position: "absolute", right: 10 }}
           onPress={() => {
             Alert.alert("Confirm", "Remove all memes from recently used?", [
               {
@@ -95,7 +99,7 @@ const RecentlyUsedMemesDisplay = ({
             ]);
           }}
         >
-          <AntDesign name="delete" size={32} color="red" />
+          <AntDesign name="delete" size={24} color="red" />
         </TouchableOpacity>
       </View>
       <MemeGrid
