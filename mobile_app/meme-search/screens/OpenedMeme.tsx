@@ -52,16 +52,6 @@ export const OpenedMemeDisplay = ({
         <TouchableOpacity style={{ marginLeft: 7 }} onPress={() => onClose()}>
           <AntDesign name="leftcircle" size={32} color={color} />
         </TouchableOpacity>
-        <Text
-          style={{
-            color: color,
-            textAlign: "center",
-            fontWeight: "bold",
-            fontSize: 24,
-          }}
-        >
-          {meme.memeName}
-        </Text>
         <TouchableOpacity
           style={{
             ...(showDeleteButton ? {} : { opacity: 0, height: 0 }),
@@ -72,6 +62,16 @@ export const OpenedMemeDisplay = ({
           <AntDesign name="delete" size={32} color="red" />
         </TouchableOpacity>
       </View>
+      <Text
+        style={{
+          color: color,
+          textAlign: "center",
+          fontWeight: "bold",
+          fontSize: 24,
+        }}
+      >
+        {meme.memeName}
+      </Text>
       <Text
         style={{
           color: color,
