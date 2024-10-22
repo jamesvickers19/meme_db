@@ -7,6 +7,8 @@ import {
   TouchableOpacity,
   Alert,
   useColorScheme,
+  Platform,
+  StatusBar,
 } from "react-native";
 import Toast from "react-native-toast-message";
 import { copyMemeToClipboardAndCache } from "../CopyMeme";
@@ -110,8 +112,7 @@ const styles = StyleSheet.create({
   controlsContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginBottom: 15,
-    marginTop: 60,
+    marginTop: Platform.OS === "ios" ? 60 : StatusBar.currentHeight || 0,
   },
   fullScreenImage: {
     width: "100%",
