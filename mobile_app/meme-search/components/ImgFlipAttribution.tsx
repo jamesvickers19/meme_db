@@ -13,7 +13,7 @@ export const ImgFlipGeneralAttribution = () => {
         Memes powered by{" "}
         <Text
           style={{
-            color: "blue",
+            color: Colors.link,
             fontSize: 16,
             textDecorationLine: "underline",
           }}
@@ -33,7 +33,11 @@ export const ImgFlipMemeTemplateAttribution = ({ meme }: { meme: Meme }) => {
   return (
     <View style={styles.imgflipAttributionContainer}>
       <Text
-        style={{ color: "blue", fontSize: 16, textDecorationLine: "underline" }}
+        style={{
+          color: Colors.link,
+          fontSize: 16,
+          textDecorationLine: "underline",
+        }}
         onPress={handleLinkPress}
       >
         ImgFlip Meme Template

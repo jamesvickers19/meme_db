@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
   input: {
     fontSize: 28,
     height: 40,
-    borderColor: "blue",
+    borderColor: Colors.border,
     borderWidth: 2,
     borderRadius: 5,
     paddingHorizontal: 10,
