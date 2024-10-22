@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import {
   StyleSheet,
   Text,
@@ -7,6 +7,7 @@ import {
   useColorScheme,
   View,
 } from "react-native";
+import * as Colors from "./Colors";
 
 interface ClearableTextInputProps {
   text: string;
@@ -19,7 +20,7 @@ const ClearableTextInput: React.FC<ClearableTextInputProps> = ({
   setText,
   placeholder,
 }: ClearableTextInputProps) => {
-  const color = useColorScheme() === "dark" ? "white" : "black";
+  const color = useColorScheme() === "dark" ? Colors.light : Colors.dark;
   const inputRef = useRef<any>(null);
   const clearText = () => {
     setText("");

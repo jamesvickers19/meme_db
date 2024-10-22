@@ -9,6 +9,7 @@ import {
   useColorScheme,
 } from "react-native";
 import { hashMeme } from "../MemeUtils";
+import * as Colors from "../Colors";
 
 const { width } = Dimensions.get("window");
 const memeGridNumColumns = 3;
@@ -36,13 +37,16 @@ export function MemeGrid({
         onPress={() => onMemePress?.(item)}
         style={[
           styles.memeGridContainer,
-          { backgroundColor: colorScheme === "dark" ? "black" : "white" },
+          {
+            backgroundColor:
+              colorScheme === "dark" ? Colors.dark : Colors.light,
+          },
         ]}
       >
         <Text
           style={[
             styles.memeTitle,
-            { color: colorScheme === "dark" ? "white" : "black" },
+            { color: colorScheme === "dark" ? Colors.light : Colors.dark },
           ]}
         >
           {item.memeName}

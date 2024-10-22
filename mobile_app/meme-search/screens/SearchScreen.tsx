@@ -19,6 +19,7 @@ import { copyMemeToClipboardAndCache } from "../CopyMeme";
 import { OpenedMemeDisplay } from "./OpenedMeme";
 import { ImgFlipGeneralAttribution } from "../components/ImgFlipAttribution";
 import { AntDesign } from "@expo/vector-icons";
+import * as Colors from "../Colors";
 
 async function useMemeSearch(query: string): Promise<Meme[]> {
   try {
@@ -47,7 +48,7 @@ async function useMemeSearch(query: string): Promise<Meme[]> {
 }
 
 const AppHelpDisplay = () => {
-  const color = useColorScheme() === "dark" ? "white" : "black";
+  const color = useColorScheme() === "dark" ? Colors.light : Colors.dark;
   return (
     <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
       <Text style={{ fontSize: 80, color: color }}>☝️</Text>
@@ -68,7 +69,7 @@ const RecentlyUsedMemesDisplay = ({
   onMemePress: (meme: Meme) => void;
   onRemoveAll: () => void;
 }) => {
-  const color = useColorScheme() === "dark" ? "white" : "black";
+  const color = useColorScheme() === "dark" ? Colors.light : Colors.dark;
   return (
     <>
       <View
@@ -124,7 +125,7 @@ const RecentlyUsedMemesDisplay = ({
 };
 
 const NoSearchResultsDisplay = () => {
-  const color = useColorScheme() === "dark" ? "white" : "black";
+  const color = useColorScheme() === "dark" ? Colors.light : Colors.dark;
   return (
     <View
       style={{
@@ -210,7 +211,9 @@ export default function SearchScreen() {
     <View
       style={[
         styles.container,
-        { backgroundColor: colorScheme === "dark" ? "black" : "white" },
+        {
+          backgroundColor: colorScheme === "dark" ? Colors.dark : Colors.light,
+        },
       ]}
     >
       <StatusBar translucent={true}></StatusBar>

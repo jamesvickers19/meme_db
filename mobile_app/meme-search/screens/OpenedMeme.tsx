@@ -17,6 +17,7 @@ import { useState } from "react";
 import { highQualityImageUri } from "../MemeUtils";
 import * as MemeCache from "../MemeCache";
 import { ImgFlipMemeTemplateAttribution } from "../components/ImgFlipAttribution";
+import * as Colors from "../Colors";
 
 export interface OpenedMemeDisplayProps {
   meme: Meme;
@@ -30,8 +31,8 @@ export const OpenedMemeDisplay = ({
   showDeleteButton,
 }: OpenedMemeDisplayProps) => {
   const colorScheme = useColorScheme();
-  const backgroundColor = colorScheme === "dark" ? "black" : "color";
-  const color = colorScheme === "dark" ? "white" : "black";
+  const backgroundColor = colorScheme === "dark" ? Colors.dark : "color";
+  const color = colorScheme === "dark" ? Colors.light : Colors.dark;
   const [imageError, setImageError] = useState(false);
   const onRemove = (meme: Meme) => {
     Alert.alert("Confirm", "Remove this meme from recently used?", [
