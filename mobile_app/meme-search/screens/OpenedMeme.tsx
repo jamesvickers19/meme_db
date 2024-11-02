@@ -117,6 +117,6 @@ const styles = StyleSheet.create({
   },
   fullScreenImage: {
     width: "100%",
-    height: "100%",
+    height: "90%",
   },
 });
