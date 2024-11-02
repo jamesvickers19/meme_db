@@ -11,13 +11,15 @@ import {
   StatusBar,
 } from "react-native";
 import Toast from "react-native-toast-message";
-import { copyMemeToClipboardAndCache } from "../CopyMeme";
+import { copyMemeToClipboardAndCache, downloadMeme } from "../CopyMeme";
 import { Meme } from "../types";
 import { useState } from "react";
 import { highQualityImageUri } from "../MemeUtils";
 import * as MemeCache from "../MemeCache";
 import { ImgFlipMemeTemplateAttribution } from "../components/ImgFlipAttribution";
 import * as Colors from "../Colors";
+import Share from "react-native-share";
+import { showMsg } from "../Utils";
 
 export interface OpenedMemeDisplayProps {
   meme: Meme;
@@ -34,7 +36,7 @@ export const OpenedMemeDisplay = ({
   const backgroundColor = colorScheme === "dark" ? Colors.dark : "color";
   const color = colorScheme === "dark" ? Colors.light : Colors.dark;
   const [imageError, setImageError] = useState(false);
-  const onRemove = (meme: Meme) => {
+  const onRemove = () => {
     Alert.alert("Confirm", "Remove this meme from recently used?", [
       {
         text: "Cancel",
@@ -49,6 +51,17 @@ export const OpenedMemeDisplay = ({
       },
     ]);
   };
+  const onShare = async () => {
+    const downloadedMemePath = await downloadMeme(meme);
+    if (!downloadedMemePath) {
+      showMsg("error", `Could not share meme`);
+      return;
+    }
+    await Share.open({
+      url: `file://${downloadedMemePath}`,
+      type: "image/png",
+    });
+  };
   return (
     <View style={[styles.openedMemeContainer, { backgroundColor }]}>
       <View style={[styles.controlsContainer, { backgroundColor }]}>
@@ -60,7 +73,7 @@ export const OpenedMemeDisplay = ({
             ...(showDeleteButton ? {} : { opacity: 0, height: 0 }),
             marginRight: 7,
           }}
-          onPress={() => onRemove(meme)}
+          onPress={() => onRemove()}
         >
           <AntDesign name="delete" size={32} color="red" />
         </TouchableOpacity>
@@ -86,6 +99,9 @@ export const OpenedMemeDisplay = ({
         (long press to copy to cliboard)
       </Text>
       <ImgFlipMemeTemplateAttribution meme={meme} />
+      <TouchableOpacity style={{ marginLeft: 7 }} onPress={() => onShare()}>
+        <AntDesign name="upload" size={32} color={color} />
+      </TouchableOpacity>
       <View style={{ backgroundColor, justifyContent: "center" }}>
         <TouchableOpacity
           onLongPress={async () => await copyMemeToClipboardAndCache(meme)}
