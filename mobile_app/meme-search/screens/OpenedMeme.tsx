@@ -76,22 +76,9 @@ export const OpenedMemeDisplay = ({
 
   return (
     <View style={[styles.openedMemeContainer, { backgroundColor }]}>
-      <View style={[styles.controlsContainer, { backgroundColor }]}>
-        <TouchableOpacity style={{ marginLeft: 7 }} onPress={() => onClose()}>
-          <AntDesign name="leftcircle" size={32} color={color} />
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={{
-            ...(showDeleteButton ? {} : { opacity: 0, height: 0 }),
-            marginRight: 7,
-          }}
-          onPress={() => onRemove()}
-        >
-          <AntDesign name="delete" size={32} color="red" />
-        </TouchableOpacity>
-      </View>
       <Text
         style={{
+          marginTop: Platform.OS === "ios" ? 60 : StatusBar.currentHeight || 0,
           color: color,
           textAlign: "center",
           fontWeight: "bold",
@@ -101,26 +88,40 @@ export const OpenedMemeDisplay = ({
         {meme.memeName}
       </Text>
       <ImgFlipMemeTemplateAttribution meme={meme} />
-      <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-        <TouchableOpacity style={{ marginLeft: 7 }} onPress={onShare}>
+      <View
+        style={{ backgroundColor, flexShrink: 1, justifyContent: "center" }}
+      >
+        <Image
+          onError={() => setImageError(true)}
+          source={{
+            // use full size image uri if available
+            uri: imageError ? meme.thumbUri : highQualityImageUri(meme),
+          }}
+          style={styles.fullScreenImage}
+          resizeMode="contain"
+        />
+      </View>
+      <View
+        style={{
+          backgroundColor,
+          flexDirection: "row",
+          justifyContent: "space-between",
+          marginBottom: 30,
+        }}
+      >
+        <TouchableOpacity style={{ marginLeft: 7 }} onPress={() => onClose()}>
+          <AntDesign name="leftcircle" size={32} color={color} />
+        </TouchableOpacity>
+        {showDeleteButton && (
+          <TouchableOpacity onPress={() => onRemove()}>
+            <AntDesign name="delete" size={32} color="red" />
+          </TouchableOpacity>
+        )}
+        <TouchableOpacity style={{ marginLeft: 10 }} onPress={onShare}>
           <AntDesign name="upload" size={32} color={color} />
         </TouchableOpacity>
-        <TouchableOpacity style={{ marginRight: 7 }} onPress={onCopy}>
+        <TouchableOpacity style={{ marginRight: 10 }} onPress={onCopy}>
           <Feather name="copy" size={32} color={color} />
-        </TouchableOpacity>
-      </View>
-      {/* TODO make this be above the buttons instead; maybe all 3 controls at bottom, then back button still top left; or all controls at bottom */}
-      <View style={{ backgroundColor, justifyContent: "center" }}>
-        <TouchableOpacity onLongPress={onCopy}>
-          <Image
-            onError={() => setImageError(true)}
-            source={{
-              // use full size image uri if available
-              uri: imageError ? meme.thumbUri : highQualityImageUri(meme),
-            }}
-            style={styles.fullScreenImage}
-            resizeMode="contain"
-          />
         </TouchableOpacity>
       </View>
       <Toast />
@@ -132,13 +133,8 @@ const styles = StyleSheet.create({
   openedMemeContainer: {
     flex: 1,
   },
-  controlsContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginTop: Platform.OS === "ios" ? 60 : StatusBar.currentHeight || 0,
-  },
   fullScreenImage: {
     width: "100%",
-    height: "90%",
+    height: "100%",
   },
 });
