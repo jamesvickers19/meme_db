@@ -1,4 +1,5 @@
 import { AntDesign } from "@expo/vector-icons";
+import { Feather } from "@expo/vector-icons";
 import {
   Image,
   StyleSheet,
@@ -11,13 +12,16 @@ import {
   StatusBar,
 } from "react-native";
 import Toast from "react-native-toast-message";
-import { copyMemeToClipboardAndCache } from "../CopyMeme";
+import { copyMemeToClipboardAndCache, downloadMeme } from "../CopyMeme";
 import { Meme } from "../types";
 import { useState } from "react";
 import { highQualityImageUri } from "../MemeUtils";
 import * as MemeCache from "../MemeCache";
 import { ImgFlipMemeTemplateAttribution } from "../components/ImgFlipAttribution";
 import * as Colors from "../Colors";
+import { showMsg } from "../Utils";
+import * as Sharing from "expo-sharing";
+import * as FileSystem from "expo-file-system";
 
 export interface OpenedMemeDisplayProps {
   meme: Meme;
@@ -34,7 +38,7 @@ export const OpenedMemeDisplay = ({
   const backgroundColor = colorScheme === "dark" ? Colors.dark : "color";
   const color = colorScheme === "dark" ? Colors.light : Colors.dark;
   const [imageError, setImageError] = useState(false);
-  const onRemove = (meme: Meme) => {
+  const onRemove = () => {
     Alert.alert("Confirm", "Remove this meme from recently used?", [
       {
         text: "Cancel",
@@ -49,6 +53,27 @@ export const OpenedMemeDisplay = ({
       },
     ]);
   };
+
+  const onCopy = async () => await copyMemeToClipboardAndCache(meme);
+
+  const onShare = async () => {
+    const downloadedImagePath = await downloadMeme(meme);
+    if (!downloadedImagePath) {
+      showMsg("error", `Could not share meme`);
+      return;
+    }
+    try {
+      if (!(await Sharing.isAvailableAsync())) {
+        showMsg("error", "Sharing is not available on this device");
+        return;
+      } else {
+        await Sharing.shareAsync(downloadedImagePath);
+      }
+    } catch (error: any) {}
+
+    await FileSystem.deleteAsync(downloadedImagePath);
+  };
+
   return (
     <View style={[styles.openedMemeContainer, { backgroundColor }]}>
       <View style={[styles.controlsContainer, { backgroundColor }]}>
@@ -60,7 +85,7 @@ export const OpenedMemeDisplay = ({
             ...(showDeleteButton ? {} : { opacity: 0, height: 0 }),
             marginRight: 7,
           }}
-          onPress={() => onRemove(meme)}
+          onPress={() => onRemove()}
         >
           <AntDesign name="delete" size={32} color="red" />
         </TouchableOpacity>
@@ -75,21 +100,18 @@ export const OpenedMemeDisplay = ({
       >
         {meme.memeName}
       </Text>
-      <Text
-        style={{
-          color: color,
-          textAlign: "center",
-          fontWeight: "bold",
-          fontSize: 16,
-        }}
-      >
-        (long press to copy to cliboard)
-      </Text>
       <ImgFlipMemeTemplateAttribution meme={meme} />
+      <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+        <TouchableOpacity style={{ marginLeft: 7 }} onPress={onShare}>
+          <AntDesign name="upload" size={32} color={color} />
+        </TouchableOpacity>
+        <TouchableOpacity style={{ marginRight: 7 }} onPress={onCopy}>
+          <Feather name="copy" size={32} color={color} />
+        </TouchableOpacity>
+      </View>
+      {/* TODO make this be above the buttons instead; maybe all 3 controls at bottom, then back button still top left; or all controls at bottom */}
       <View style={{ backgroundColor, justifyContent: "center" }}>
-        <TouchableOpacity
-          onLongPress={async () => await copyMemeToClipboardAndCache(meme)}
-        >
+        <TouchableOpacity onLongPress={onCopy}>
           <Image
             onError={() => setImageError(true)}
             source={{

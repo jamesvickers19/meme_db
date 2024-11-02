@@ -11,7 +11,7 @@ export async function copyMemeToClipboardAndCache(meme: Meme) {
   }
 }
 
-async function copyMemeToClipboard(meme: Meme) {
+export async function downloadMeme(meme: Meme) {
   // try to get better image quality if possible by going to full source image
   // not always findable, so fall back to thumbUri if needed.
   const possibleUris = [highQualityImageUri(meme), meme.thumbUri];
@@ -23,15 +23,29 @@ async function copyMemeToClipboard(meme: Meme) {
       // Read the file and convert it to Base64
       const fileInfo = await FileSystem.getInfoAsync(localUri);
       if (fileInfo.exists) {
-        const base64 = await FileSystem.readAsStringAsync(localUri, {
-          encoding: FileSystem.EncodingType.Base64,
-        });
-        await Clipboard.setImageAsync(base64);
-        await FileSystem.deleteAsync(localUri);
-        showMsg("success", `Meme copied to clipboard!`);
-        return true;
+        return localUri;
       }
     } catch (error: any) {}
+  }
+
+  showMsg("error", `Could not copy meme to clipboard!`);
+  return null;
+}
+
+async function copyMemeToClipboard(meme: Meme) {
+  const downloadedImgPath = await downloadMeme(meme);
+  if (downloadedImgPath) {
+    try {
+      const base64 = await FileSystem.readAsStringAsync(downloadedImgPath, {
+        encoding: FileSystem.EncodingType.Base64,
+      });
+      await Clipboard.setImageAsync(base64);
+      showMsg("success", `Meme copied to clipboard!`);
+      return true;
+    } catch (error: any) {
+    } finally {
+      await FileSystem.deleteAsync(downloadedImgPath);
+    }
   }
 
   showMsg("error", `Could not copy meme to clipboard!`);
