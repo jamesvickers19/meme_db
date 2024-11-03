@@ -12,16 +12,13 @@ import {
   StatusBar,
 } from "react-native";
 import Toast from "react-native-toast-message";
-import { copyMemeToClipboardAndCache, downloadMeme } from "../CopyMeme";
+import { copyMemeToClipboardAndCache, shareMemeAndCache } from "../ShareMeme";
 import { Meme } from "../types";
 import { useState } from "react";
 import { highQualityImageUri } from "../MemeUtils";
 import * as MemeCache from "../MemeCache";
 import { ImgFlipMemeTemplateAttribution } from "../components/ImgFlipAttribution";
 import * as Colors from "../Colors";
-import { showMsg } from "../Utils";
-import * as Sharing from "expo-sharing";
-import * as FileSystem from "expo-file-system";
 
 export interface OpenedMemeDisplayProps {
   meme: Meme;
@@ -56,23 +53,7 @@ export const OpenedMemeDisplay = ({
 
   const onCopy = async () => await copyMemeToClipboardAndCache(meme);
 
-  const onShare = async () => {
-    const downloadedImagePath = await downloadMeme(meme);
-    if (!downloadedImagePath) {
-      showMsg("error", `Could not share meme`);
-      return;
-    }
-    try {
-      if (!(await Sharing.isAvailableAsync())) {
-        showMsg("error", "Sharing is not available on this device");
-        return;
-      } else {
-        await Sharing.shareAsync(downloadedImagePath);
-      }
-    } catch (error: any) {}
-
-    await FileSystem.deleteAsync(downloadedImagePath);
-  };
+  const onShare = async () => await shareMemeAndCache(meme);
 
   return (
     <View style={[styles.openedMemeContainer, { backgroundColor }]}>

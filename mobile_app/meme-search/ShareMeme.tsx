@@ -4,11 +4,30 @@ import * as FileSystem from "expo-file-system";
 import * as Clipboard from "expo-clipboard";
 import { highQualityImageUri } from "./MemeUtils";
 import * as MemeCache from "./MemeCache";
+import * as Sharing from "expo-sharing";
 
 export async function copyMemeToClipboardAndCache(meme: Meme) {
   if (await copyMemeToClipboard(meme)) {
     await MemeCache.addMemeToCache(meme);
   }
+}
+
+export async function shareMemeAndCache(meme: Meme) {
+  const downloadedImagePath = await downloadMeme(meme);
+  if (!downloadedImagePath) {
+    showMsg("error", `Could not share meme`);
+    return;
+  }
+  try {
+    if (!(await Sharing.isAvailableAsync())) {
+      showMsg("error", "Sharing is not available on this device");
+      return;
+    } else {
+      await Sharing.shareAsync(downloadedImagePath);
+    }
+  } catch (error: any) {}
+
+  await FileSystem.deleteAsync(downloadedImagePath);
 }
 
 export async function downloadMeme(meme: Meme) {

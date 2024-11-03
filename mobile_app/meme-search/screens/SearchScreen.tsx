@@ -15,7 +15,7 @@ import Toast from "react-native-toast-message";
 import { imgflipV1, Meme } from "../types";
 import { MemeGrid } from "../components/MemeGrid";
 import * as MemeCache from "../MemeCache";
-import { copyMemeToClipboardAndCache } from "../CopyMeme";
+import { copyMemeToClipboardAndCache } from "../ShareMeme";
 import { OpenedMemeDisplay } from "./OpenedMeme";
 import { ImgFlipGeneralAttribution } from "../components/ImgFlipAttribution";
 import { AntDesign } from "@expo/vector-icons";
