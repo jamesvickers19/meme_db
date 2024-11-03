@@ -24,6 +24,7 @@ export async function shareMemeAndCache(meme: Meme) {
       return;
     } else {
       await Sharing.shareAsync(downloadedImagePath);
+      await MemeCache.addMemeToCache(meme);
     }
   } catch (error: any) {}
 
