@@ -48,7 +48,6 @@ export async function downloadMeme(meme: Meme) {
     } catch (error: any) {}
   }
 
-  showMsg("error", `Could not copy meme to clipboard!`);
   return null;
 }
 
