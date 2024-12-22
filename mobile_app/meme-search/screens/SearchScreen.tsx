@@ -20,6 +20,7 @@ import { OpenedMemeDisplay } from "./OpenedMeme";
 import { ImgFlipGeneralAttribution } from "../components/ImgFlipAttribution";
 import { AntDesign } from "@expo/vector-icons";
 import * as Colors from "../Colors";
+import * as RNIap from "react-native-iap";
 
 async function useMemeSearch(query: string): Promise<Meme[]> {
   try {

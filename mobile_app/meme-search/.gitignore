@@ -1,4 +1,7 @@
-# Learn more https://docs.github.com/en/get-started/getting-started-with-git/ignoring-files
+# React Native builds
+
+ios/
+android/
 
 # dependencies
 node_modules/
