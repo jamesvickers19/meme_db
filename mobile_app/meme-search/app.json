@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "MemeStash",
-    "slug": "meme-stash",
+    "name": "MemeSearch",
+    "slug": "meme-search",
     "version": "1.0.2",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -13,14 +13,14 @@
     },
     "ios": {
       "supportsTablet": false,
-      "bundleIdentifier": "com.jamesvickers19.memestash"
+      "bundleIdentifier": "com.jamesvickers19.memesearch"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.jamesvickers19.memestash",
+      "package": "com.jamesvickers19.memesearch",
       "intentFilters": [
         {
           "action": "android.intent.action.VIEW",
