@@ -2,7 +2,7 @@
   "expo": {
     "name": "MemeSearch",
     "slug": "meme-search",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
@@ -13,7 +13,10 @@
     },
     "ios": {
       "supportsTablet": false,
-      "bundleIdentifier": "com.jamesvickers19.memesearch"
+      "bundleIdentifier": "com.jamesvickers19.memesearch",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {
