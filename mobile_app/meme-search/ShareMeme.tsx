@@ -39,11 +39,17 @@ export async function downloadMeme(meme: Meme) {
     try {
       const localUri =
         FileSystem.documentDirectory + `meme_search${Date.now()}.jpg`;
-      await FileSystem.downloadAsync(imgUri, localUri);
-      // Read the file and convert it to Base64
+      const downloadResult = await FileSystem.downloadAsync(imgUri, localUri);
       const fileInfo = await FileSystem.getInfoAsync(localUri);
       if (fileInfo.exists) {
-        return localUri;
+        if (downloadResult.status === 200) {
+          return localUri;
+        } else {
+          // file download was from a bad status code like a 404, don't return and try to delete the file.
+          try {
+            await FileSystem.deleteAsync(localUri);
+          } catch (error: any) {}
+        }
       }
     } catch (error: any) {}
   }
